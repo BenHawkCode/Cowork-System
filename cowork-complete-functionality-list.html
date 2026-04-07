@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Complete Claude Cowork Functionality List — The Coach Consultant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #6B9B9B;
+            --teal-dark: #5a8585;
+            --teal-light: #7ab0b0;
+            --teal-glow: rgba(107,155,155,0.3);
+            --black: #000000;
+            --white: #FFFFFF;
+            --dark-grey: #1A1A1A;
+            --mid-grey: #2A2A2A;
+            --light-grey: #E0E0E0;
+            --muted: #999999;
+            --bg-cream: #FAFAF8;
+            --red-pain: #E85D5D;
+            --amber: #F0A030;
+            --green: #4CAF50;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; color: var(--dark-grey); background: var(--white); line-height: 1.6; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cover */
+        .cover { background: linear-gradient(135deg, var(--dark-grey) 0%, var(--mid-grey) 100%); padding: 80px 24px; text-align: center; color: white; position: relative; overflow: hidden; }
+        .cover::before { content: ''; position: absolute; top: -50%; right: -20%; width: 500px; height: 500px; background: rgba(107,155,155,0.08); border-radius: 50%; }
+        .cover::after { content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px; background: rgba(107,155,155,0.05); border-radius: 50%; }
+        .cover-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+        .cover-badge { display: inline-block; background: var(--teal); color: white; padding: 6px 18px; border-radius: 50px; font-size: 13px; font-weight: 600; margin-bottom: 24px; }
+        .cover h1 { font-size: 40px; font-weight: 900; line-height: 1.15; margin-bottom: 16px; }
+        .cover h1 span { color: var(--teal-light); }
+        .cover p { font-size: 17px; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto 32px; }
+        .cover-stats { display: flex; justify-content: center; gap: 48px; }
+        .cover-stat { text-align: center; }
+        .cover-stat-num { font-size: 36px; font-weight: 900; color: var(--teal-light); }
+        .cover-stat-label { font-size: 12px; color: rgba(255,255,255,0.6); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Intro */
+        .intro { padding: 60px 24px; max-width: 800px; margin: 0 auto; }
+        .intro h2 { font-size: 28px; font-weight: 800; margin-bottom: 16px; }
+        .intro p { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
+
+        /* Quick Reference Matrix */
+        .matrix { padding: 40px 24px 60px; background: var(--bg-cream); }
+        .matrix-inner { max-width: 1000px; margin: 0 auto; }
+        .matrix h2 { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 32px; }
+        .matrix-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .matrix-card { background: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; padding: 24px; transition: all 0.3s; cursor: pointer; }
+        .matrix-card:hover { border-color: var(--teal); box-shadow: 0 4px 20px rgba(0,0,0,0.05); transform: translateY(-2px); }
+        .matrix-icon { font-size: 28px; margin-bottom: 8px; }
+        .matrix-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .matrix-meta { display: flex; gap: 16px; margin-bottom: 8px; }
+        .matrix-meta-item { font-size: 12px; color: var(--muted); }
+        .matrix-meta-item strong { color: var(--teal); }
+        .matrix-connectors { display: flex; flex-wrap: wrap; gap: 4px; }
+        .connector-pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 50px; background: rgba(107,155,155,0.1); color: var(--teal); }
+
+        /* Category Sections */
+        .category-section { padding: 60px 24px; border-bottom: 1px solid var(--light-grey); }
+        .category-section:nth-child(even) { background: var(--bg-cream); }
+        .category-inner { max-width: 900px; margin: 0 auto; }
+        .category-header { margin-bottom: 32px; }
+        .category-icon { font-size: 36px; margin-bottom: 8px; }
+        .category-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .category-desc { font-size: 15px; color: var(--muted); margin-bottom: 16px; }
+        .category-connectors { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        .connector-badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 50px; background: rgba(107,155,155,0.1); color: var(--teal); }
+
+        /* Use Case Cards */
+        .use-case-grid { display: grid; gap: 12px; }
+        .use-case { background: var(--white); border: 1px solid var(--light-grey); border-radius: 12px; padding: 20px 24px; transition: all 0.3s; }
+        .use-case:hover { border-color: var(--teal); box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+        .use-case-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--dark-grey); }
+        .use-case-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+        .use-case-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+        .meta-connector { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 50px; background: rgba(107,155,155,0.1); color: var(--teal); }
+        .meta-time { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 50px; background: rgba(76,175,80,0.1); color: var(--green); }
+        .meta-difficulty { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 50px; }
+        .diff-easy { background: rgba(76,175,80,0.1); color: var(--green); }
+        .diff-medium { background: rgba(240,160,48,0.1); color: var(--amber); }
+        .diff-advanced { background: rgba(232,93,93,0.1); color: var(--red-pain); }
+
+        /* Connector Reference */
+        .connector-ref { padding: 60px 24px; background: var(--bg-cream); }
+        .connector-ref-inner { max-width: 900px; margin: 0 auto; }
+        .connector-ref h2 { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 8px; }
+        .connector-ref .subtitle { font-size: 15px; color: var(--muted); text-align: center; margin-bottom: 32px; }
+        .connector-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .connector-card { background: var(--white); border: 1px solid var(--light-grey); border-radius: 12px; padding: 16px; }
+        .connector-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--dark-grey); }
+        .connector-cats { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+        /* Getting Started */
+        .getting-started { padding: 60px 24px; }
+        .getting-started-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+        .getting-started h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .getting-started .subtitle { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+        .priority-steps { display: grid; gap: 16px; text-align: left; }
+        .priority-step { display: flex; gap: 16px; align-items: flex-start; background: var(--white); border: 1px solid var(--light-grey); border-radius: 12px; padding: 20px; }
+        .step-num { width: 40px; height: 40px; border-radius: 50%; background: var(--teal); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+        .step-content h3 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .step-content p { font-size: 13px; color: var(--muted); }
+
+        /* CTA */
+        .cta-section { background: linear-gradient(135deg, var(--dark-grey) 0%, var(--mid-grey) 100%); padding: 60px 24px; text-align: center; }
+        .cta-inner { max-width: 600px; margin: 0 auto; }
+        .cta-section h2 { font-size: 28px; font-weight: 800; color: white; margin-bottom: 12px; }
+        .cta-section p { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 24px; }
+        .cta-btn { display: inline-block; background: var(--teal); color: white; padding: 16px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; transition: all 0.3s; }
+        .cta-btn:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 4px 20px var(--teal-glow); }
+
+        footer { padding: 32px 24px; text-align: center; border-top: 1px solid var(--light-grey); }
+        footer p { font-size: 13px; color: var(--muted); }
+        footer a { color: var(--teal); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .cover h1 { font-size: 28px; }
+            .cover-stats { flex-direction: column; gap: 16px; }
+            .matrix-grid { grid-template-columns: 1fr; }
+            .connector-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .connector-grid { grid-template-columns: 1fr; }
+        }
+        @media print {
+            body { background: white; }
+            .cover { padding: 40px 20px; }
+            .category-section { break-inside: avoid; padding: 30px 20px; }
+            .use-case { break-inside: avoid; }
+            .cta-section { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover">
+    <div class="cover-inner">
+        <div class="cover-badge">The Coach Consultant</div>
+        <h1>The Complete Claude <span>Cowork</span> Functionality List</h1>
+        <p>Every way a business owner or service provider can use Claude Cowork to build, manage, and scale their company. Organised by business function, not by feature.</p>
+        <div class="cover-stats">
+            <div class="cover-stat">
+                <div class="cover-stat-num">84</div>
+                <div class="cover-stat-label">Use Cases</div>
+            </div>
+            <div class="cover-stat">
+                <div class="cover-stat-num">10</div>
+                <div class="cover-stat-label">Business Areas</div>
+            </div>
+            <div class="cover-stat">
+                <div class="cover-stat-num">38+</div>
+                <div class="cover-stat-label">Connectors</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+    <h2>How to Use This Guide</h2>
+    <p>This guide is organised by <strong>what you do in your business</strong>, not by how Cowork works technically. Find the area where you spend the most time or feel the most pain, and discover exactly what Cowork can automate for you.</p>
+    <p>Each use case shows: what Cowork does, which connectors you need, how much time you will save, and how difficult it is to set up. Start with the easy wins in your weakest areas.</p>
+    <p>Not sure where to start? Take the <strong>Cowork Readiness Assessment</strong> first. It analyses your current workflows and tells you exactly which features to prioritise.</p>
+</section>
+
+<!-- QUICK REFERENCE MATRIX -->
+<section class="matrix">
+    <div class="matrix-inner">
+        <h2>Quick Reference Matrix</h2>
+        <div class="matrix-grid">
+            <div class="matrix-card" onclick="document.getElementById('cat0').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#9999;&#65039;</div>
+                <div class="matrix-title">Content Marketing & Social Media</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>10</strong> use cases</span><span class="matrix-meta-item"><strong>15-30</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Canva</span><span class="connector-pill">Notion</span><span class="connector-pill">Google Drive</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat1').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#128101;</div>
+                <div class="matrix-title">Client Fulfilment & Onboarding</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>10</strong> use cases</span><span class="matrix-meta-item"><strong>8-15</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Gmail</span><span class="connector-pill">Google Drive</span><span class="connector-pill">Google Calendar</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat2').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#127919;</div>
+                <div class="matrix-title">Sales & Lead Generation</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>10</strong> use cases</span><span class="matrix-meta-item"><strong>12-25</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">HubSpot</span><span class="connector-pill">Gmail</span><span class="connector-pill">Zapier</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat3').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#9881;&#65039;</div>
+                <div class="matrix-title">Operations & Systems</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>8</strong> use cases</span><span class="matrix-meta-item"><strong>10-20</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Notion</span><span class="connector-pill">Zapier</span><span class="connector-pill">Google Sheets</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat4').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#128183;</div>
+                <div class="matrix-title">Financial Administration</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>8</strong> use cases</span><span class="matrix-meta-item"><strong>5-12</strong> hrs/month saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Stripe</span><span class="connector-pill">Google Sheets</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat5').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#9993;&#65039;</div>
+                <div class="matrix-title">Email & Communication</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>7</strong> use cases</span><span class="matrix-meta-item"><strong>8-15</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Gmail</span><span class="connector-pill">Slack</span><span class="connector-pill">Microsoft 365</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat6').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#129309;</div>
+                <div class="matrix-title">Team & VA Management</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>7</strong> use cases</span><span class="matrix-meta-item"><strong>6-12</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Slack</span><span class="connector-pill">Notion</span><span class="connector-pill">Google Drive</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat7').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#129517;</div>
+                <div class="matrix-title">Strategy & Growth Planning</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>8</strong> use cases</span><span class="matrix-meta-item"><strong>5-15</strong> hrs/month saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Google Sheets</span><span class="connector-pill">Web Browsing</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat8').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#128202;</div>
+                <div class="matrix-title">Data Analysis & Reporting</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>8</strong> use cases</span><span class="matrix-meta-item"><strong>6-15</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Google Sheets</span><span class="connector-pill">Stripe</span><span class="connector-pill">HubSpot</span></div>
+            </div>
+            <div class="matrix-card" onclick="document.getElementById('cat9').scrollIntoView({behavior:'smooth'})">
+                <div class="matrix-icon">&#128193;</div>
+                <div class="matrix-title">File Management & Organisation</div>
+                <div class="matrix-meta"><span class="matrix-meta-item"><strong>8</strong> use cases</span><span class="matrix-meta-item"><strong>3-8</strong> hrs/week saved</span></div>
+                <div class="matrix-connectors"><span class="connector-pill">Google Drive</span><span class="connector-pill">Local Files</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 1: CONTENT MARKETING & SOCIAL MEDIA -->
+<section class="category-section" id="cat0">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#9999;&#65039;</div>
+            <div class="category-title">Content Marketing & Social Media</div>
+            <div class="category-desc">Automate your entire content engine from ideation to publishing across every channel.</div>
+            <div class="category-connectors">
+                <span class="connector-badge">Canva</span>
+                <span class="connector-badge">Notion</span>
+                <span class="connector-badge">Google Drive</span>
+                <span class="connector-badge">Zapier</span>
+                <span class="connector-badge">Figma</span>
+            </div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case">
+                <div class="use-case-title">Weekly content calendar generation</div>
+                <div class="use-case-desc">Creates a full week of content topics, hooks, and draft copy based on your strategy, content pillars, and upcoming events.</div>
+                <div class="use-case-meta"><span class="meta-connector">Notion</span><span class="meta-connector">Google Calendar</span><span class="meta-time">2-3 hrs/week</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Social media post drafting (all platforms)</div>
+                <div class="use-case-desc">Drafts posts for Instagram, LinkedIn, Facebook, and X in your brand voice from a single content brief or topic.</div>
+                <div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Canva</span><span class="meta-time">3-5 hrs/week</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Blog and long-form content creation</div>
+                <div class="use-case-desc">Writes full blog posts, articles, or guides from your outline or topic with SEO considerations built in.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Local Files</span><span class="meta-time">2-4 hrs/piece</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Content repurposing engine</div>
+                <div class="use-case-desc">Takes one piece of content and creates versions for every platform. Blog to social posts, email to carousel, podcast notes to LinkedIn.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Notion</span><span class="meta-time">3-5 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Email newsletter drafting</div>
+                <div class="use-case-desc">Writes weekly or monthly newsletters in your voice with personalised sections and proven subject lines.</div>
+                <div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Local Files</span><span class="meta-time">1-2 hrs/issue</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Social media graphics briefs</div>
+                <div class="use-case-desc">Creates detailed design briefs for Canva templates or sends directly to Canva for creation.</div>
+                <div class="use-case-meta"><span class="meta-connector">Canva</span><span class="meta-connector">Figma</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Video script writing</div>
+                <div class="use-case-desc">Creates YouTube scripts, Reel scripts, or TikTok scripts with hooks, timestamps, and CTAs.</div>
+                <div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">1-3 hrs/script</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Keyword and topic research</div>
+                <div class="use-case-desc">Researches optimal keywords, trending topics, and content gaps in your niche using web browsing.</div>
+                <div class="use-case-meta"><span class="meta-connector">Computer Use</span><span class="meta-connector">Local Files</span><span class="meta-time">1 hr/week</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Content performance analysis</div>
+                <div class="use-case-desc">Analyses your content metrics and recommends what to create more (or less) of based on engagement data.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Local Files</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Scheduled content batch creation</div>
+                <div class="use-case-desc">Runs on a schedule to pre-create next week's content every Friday with topics, hooks, and drafts ready.</div>
+                <div class="use-case-meta"><span class="meta-connector">Scheduled Tasks</span><span class="meta-connector">Local Files</span><span class="meta-time">3-5 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 2: CLIENT FULFILMENT & ONBOARDING -->
+<section class="category-section" id="cat1">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#128101;</div>
+            <div class="category-title">Client Fulfilment & Onboarding</div>
+            <div class="category-desc">Systematise every client touchpoint from first payment to offboarding and referral.</div>
+            <div class="category-connectors">
+                <span class="connector-badge">Gmail</span>
+                <span class="connector-badge">Google Drive</span>
+                <span class="connector-badge">Google Calendar</span>
+                <span class="connector-badge">Notion</span>
+                <span class="connector-badge">Zapier</span>
+            </div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case">
+                <div class="use-case-title">Automated welcome pack generation</div>
+                <div class="use-case-desc">Creates personalised welcome packs with client-specific details populated from intake forms or call notes.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Gmail</span><span class="meta-time">1-2 hrs/client</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Client onboarding email sequences</div>
+                <div class="use-case-desc">Drafts and schedules the full onboarding email sequence with all logistics, expectations, and first steps.</div>
+                <div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Zapier</span><span class="meta-time">1 hr/client</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Session prep and briefing</div>
+                <div class="use-case-desc">Compiles client history, recent metrics, and discussion agenda before each session automatically.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Calendar</span><span class="meta-connector">Google Drive</span><span class="meta-time">30-60 min/session</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Session notes and action items</div>
+                <div class="use-case-desc">Takes your session notes and generates formatted action items for both client and you with deadlines.</div>
+                <div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">30 min/session</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Client progress reports</div>
+                <div class="use-case-desc">Creates progress reports showing achievements, metrics movement, and next steps for each client.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Google Drive</span><span class="meta-time">1-2 hrs/client/month</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Course and programme content creation</div>
+                <div class="use-case-desc">Builds module content, worksheets, and resources for group programmes or online courses.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Canva</span><span class="meta-time">3-5 hrs/module</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Testimonial and case study creation</div>
+                <div class="use-case-desc">Turns client results into formatted case studies and testimonial graphics briefs for social proof.</div>
+                <div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Canva</span><span class="meta-time">1-2 hrs/case study</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Client offboarding and retention</div>
+                <div class="use-case-desc">Generates offboarding packs, referral requests, and re-engagement sequences automatically.</div>
+                <div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Google Drive</span><span class="meta-time">30 min/client</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Group session planning</div>
+                <div class="use-case-desc">Plans group session agendas, creates worksheets, and sends prep materials to participants.</div>
+                <div class="use-case-meta"><span class="meta-connector">Google Calendar</span><span class="meta-connector">Gmail</span><span class="meta-time">1-2 hrs/session</span><span class="meta-difficulty diff-medium">Medium</span></div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Client satisfaction surveys</div>
+                <div class="use-case-desc">Creates and distributes feedback forms, then analyses and summarises results into actionable insights.</div>
+                <div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Google Sheets</span><span class="meta-time">1 hr/quarter</span><span class="meta-difficulty diff-easy">Easy</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 3: SALES & LEAD GENERATION -->
+<section class="category-section" id="cat2">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#127919;</div>
+            <div class="category-title">Sales & Lead Generation</div>
+            <div class="category-desc">Automate your pipeline, prospect research, and follow-up so no lead ever falls through the cracks.</div>
+            <div class="category-connectors">
+                <span class="connector-badge">HubSpot</span>
+                <span class="connector-badge">Gmail</span>
+                <span class="connector-badge">Zapier</span>
+                <span class="connector-badge">Google Sheets</span>
+            </div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">Lead research and enrichment</div><div class="use-case-desc">Researches prospects, enriches lead data, and compiles briefing documents before outreach.</div><div class="use-case-meta"><span class="meta-connector">Computer Use</span><span class="meta-connector">Google Sheets</span><span class="meta-time">3-5 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Automated follow-up sequences</div><div class="use-case-desc">Drafts and queues follow-up emails based on pipeline stage and last contact date.</div><div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">HubSpot</span><span class="meta-time">2-4 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Proposal and pitch document creation</div><div class="use-case-desc">Generates customised proposals from templates using call notes and client data.</div><div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Local Files</span><span class="meta-time">1-2 hrs/proposal</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">CRM data hygiene and updates</div><div class="use-case-desc">Cleans, updates, and maintains CRM records automatically. Removes duplicates, fills gaps, corrects formatting.</div><div class="use-case-meta"><span class="meta-connector">HubSpot</span><span class="meta-connector">Google Sheets</span><span class="meta-time">2-3 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Sales call prep briefings</div><div class="use-case-desc">Compiles client history, previous interactions, and suggested talking points before each sales call.</div><div class="use-case-meta"><span class="meta-connector">Google Calendar</span><span class="meta-connector">HubSpot</span><span class="meta-time">30 min/call</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Pipeline reporting and forecasting</div><div class="use-case-desc">Generates weekly pipeline reports with conversion rates, revenue forecasts, and recommended actions.</div><div class="use-case-meta"><span class="meta-connector">HubSpot</span><span class="meta-connector">Google Sheets</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">DM and outreach script generation</div><div class="use-case-desc">Creates personalised outreach messages based on prospect research and your proven templates.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Computer Use</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Webinar and workshop planning</div><div class="use-case-desc">Plans event content, creates registration pages, and drafts promotional email sequences.</div><div class="use-case-meta"><span class="meta-connector">Google Calendar</span><span class="meta-connector">Gmail</span><span class="meta-time">3-5 hrs/event</span><span class="meta-difficulty diff-advanced">Advanced</span></div></div>
+            <div class="use-case"><div class="use-case-title">Post-call summary and action items</div><div class="use-case-desc">Summarises call notes and creates follow-up action items with deadlines and next steps.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">30 min/call</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Win/loss analysis</div><div class="use-case-desc">Analyses closed deals and lost opportunities to identify patterns in what works and what does not.</div><div class="use-case-meta"><span class="meta-connector">HubSpot</span><span class="meta-connector">Google Sheets</span><span class="meta-time">2-3 hrs/month</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 4: OPERATIONS & SYSTEMS -->
+<section class="category-section" id="cat3">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#9881;&#65039;</div>
+            <div class="category-title">Operations & Systems</div>
+            <div class="category-desc">Document, automate, and optimise every process in your business.</div>
+            <div class="category-connectors"><span class="connector-badge">Notion</span><span class="connector-badge">Jira</span><span class="connector-badge">Zapier</span><span class="connector-badge">Google Drive</span></div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">SOP creation and documentation</div><div class="use-case-desc">Generates comprehensive SOPs from your verbal descriptions with checklists, steps, and version tracking.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Notion</span><span class="meta-time">2-4 hrs/SOP</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Process automation design</div><div class="use-case-desc">Identifies manual processes and creates automation workflows using Cowork connectors and scheduled tasks.</div><div class="use-case-meta"><span class="meta-connector">Zapier</span><span class="meta-connector">Local Files</span><span class="meta-time">3-5 hrs one-off</span><span class="meta-difficulty diff-advanced">Advanced</span></div></div>
+            <div class="use-case"><div class="use-case-title">Tech stack audit and optimisation</div><div class="use-case-desc">Reviews your current tools, identifies redundancies, and recommends consolidation or better alternatives.</div><div class="use-case-meta"><span class="meta-connector">Computer Use</span><span class="meta-connector">Local Files</span><span class="meta-time">2-3 hrs/quarter</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Project management setup</div><div class="use-case-desc">Creates project boards, task lists, and timeline documents for any initiative.</div><div class="use-case-meta"><span class="meta-connector">Notion</span><span class="meta-connector">Jira</span><span class="meta-time">2-3 hrs/project</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Workflow monitoring and alerting</div><div class="use-case-desc">Scheduled checks on key business processes with Slack or email alerts for issues or missed deadlines.</div><div class="use-case-meta"><span class="meta-connector">Scheduled Tasks</span><span class="meta-connector">Slack</span><span class="meta-time">Ongoing</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Quality control checklists</div><div class="use-case-desc">Creates and maintains QC checklists for key deliverables ensuring consistency across all client work.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">1-2 hrs one-off</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Vendor and tool comparison</div><div class="use-case-desc">Researches and compares tools, creating detailed comparison documents with pricing, features, and recommendations.</div><div class="use-case-meta"><span class="meta-connector">Computer Use</span><span class="meta-connector">Local Files</span><span class="meta-time">2-4 hrs/comparison</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Meeting agenda and minutes</div><div class="use-case-desc">Generates agendas before meetings and formats minutes after with action items and owners.</div><div class="use-case-meta"><span class="meta-connector">Google Calendar</span><span class="meta-connector">Local Files</span><span class="meta-time">30 min/meeting</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 5: FINANCIAL ADMINISTRATION -->
+<section class="category-section" id="cat4">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#128183;</div>
+            <div class="category-title">Financial Administration</div>
+            <div class="category-desc">Automate invoicing, reporting, forecasting, and tax prep so finances run themselves.</div>
+            <div class="category-connectors"><span class="connector-badge">Stripe</span><span class="connector-badge">Google Sheets</span><span class="connector-badge">Google Drive</span></div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">Invoice generation and tracking</div><div class="use-case-desc">Creates formatted invoices and tracks payment status with automated reminder emails for overdue payments.</div><div class="use-case-meta"><span class="meta-connector">Stripe</span><span class="meta-connector">Google Sheets</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Expense report creation</div><div class="use-case-desc">Reads receipt folders and creates categorised expense reports with totals by category.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Sheets</span><span class="meta-time">1-2 hrs/month</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Monthly financial summary</div><div class="use-case-desc">Generates P&L overviews, cash flow summaries, and variance analysis from connected data sources.</div><div class="use-case-meta"><span class="meta-connector">Stripe</span><span class="meta-connector">Google Sheets</span><span class="meta-time">2-3 hrs/month</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Revenue forecasting models</div><div class="use-case-desc">Creates Excel-based financial models with scenario planning and pipeline-weighted projections.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Sheets</span><span class="meta-time">2-4 hrs/quarter</span><span class="meta-difficulty diff-advanced">Advanced</span></div></div>
+            <div class="use-case"><div class="use-case-title">Tax preparation documents</div><div class="use-case-desc">Compiles and organises tax-relevant data into accountant-ready packs with categorised expenses and revenue.</div><div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Local Files</span><span class="meta-time">3-5 hrs/year-end</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Payment reminder drafting</div><div class="use-case-desc">Creates polite but firm payment reminder emails based on how overdue each invoice is.</div><div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Stripe</span><span class="meta-time">30 min/week</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Budget vs actual tracking</div><div class="use-case-desc">Generates reports comparing planned budget against actual spending with variance explanations.</div><div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Stripe</span><span class="meta-time">1-2 hrs/month</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Pricing analysis and modelling</div><div class="use-case-desc">Analyses pricing against market data and creates pricing strategy documents with different tier options.</div><div class="use-case-meta"><span class="meta-connector">Computer Use</span><span class="meta-connector">Local Files</span><span class="meta-time">2-3 hrs/quarter</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 6: EMAIL & COMMUNICATION -->
+<section class="category-section" id="cat5">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#9993;&#65039;</div>
+            <div class="category-title">Email & Communication</div>
+            <div class="category-desc">Cut email time in half and never miss a message across any channel.</div>
+            <div class="category-connectors"><span class="connector-badge">Gmail</span><span class="connector-badge">Slack</span><span class="connector-badge">Microsoft 365</span><span class="connector-badge">Zapier</span></div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">Email triage and prioritisation</div><div class="use-case-desc">Scans inbox and categorises emails by urgency and type, flagging what needs your personal attention.</div><div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-time">30-60 min/day</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Automated email drafting</div><div class="use-case-desc">Drafts replies to common email types in your voice, ready for review and sending.</div><div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Local Files</span><span class="meta-time">1-2 hrs/day</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Email sequence creation</div><div class="use-case-desc">Builds multi-step email sequences for sales, onboarding, or nurture campaigns.</div><div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Zapier</span><span class="meta-time">2-3 hrs/sequence</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Newsletter writing and scheduling</div><div class="use-case-desc">Creates full newsletters from your content highlights, news, and insights.</div><div class="use-case-meta"><span class="meta-connector">Gmail</span><span class="meta-connector">Local Files</span><span class="meta-time">1-2 hrs/issue</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Communication template library</div><div class="use-case-desc">Creates and maintains a library of email templates for every business scenario you encounter.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">3-5 hrs one-off</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Slack channel management</div><div class="use-case-desc">Summarises channels, drafts responses, and posts updates across your Slack workspace.</div><div class="use-case-meta"><span class="meta-connector">Slack</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Meeting scheduling and follow-up</div><div class="use-case-desc">Manages calendar invites and sends pre-meeting prep and post-meeting summary communications.</div><div class="use-case-meta"><span class="meta-connector">Google Calendar</span><span class="meta-connector">Gmail</span><span class="meta-time">30 min/day</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 7: TEAM & VA MANAGEMENT -->
+<section class="category-section" id="cat6">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#129309;</div>
+            <div class="category-title">Team & VA Management</div>
+            <div class="category-desc">Delegate effectively even if you are a team of one. Cowork becomes your AI team member.</div>
+            <div class="category-connectors"><span class="connector-badge">Slack</span><span class="connector-badge">Notion</span><span class="connector-badge">Google Drive</span><span class="connector-badge">Gmail</span></div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">Task brief creation</div><div class="use-case-desc">Generates detailed task briefs from your verbal description with context, deadlines, and success criteria.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Notion</span><span class="meta-time">30 min/task</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">VA training documentation</div><div class="use-case-desc">Creates step-by-step training docs with instructions and checklists for any recurring task.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">2-4 hrs/SOP</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Team communication summaries</div><div class="use-case-desc">Summarises Slack channels and email threads into key action items and decisions.</div><div class="use-case-meta"><span class="meta-connector">Slack</span><span class="meta-connector">Gmail</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Performance tracking dashboards</div><div class="use-case-desc">Creates team performance reports and tracking documents for regular reviews.</div><div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Notion</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Meeting prep and follow-up</div><div class="use-case-desc">Generates agendas before team meetings and distributes action items after.</div><div class="use-case-meta"><span class="meta-connector">Google Calendar</span><span class="meta-connector">Slack</span><span class="meta-time">30 min/meeting</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Handover documentation</div><div class="use-case-desc">Creates comprehensive handover packs when changing team members or transitioning responsibilities.</div><div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Notion</span><span class="meta-time">3-5 hrs/handover</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Feedback and review templates</div><div class="use-case-desc">Generates performance review frameworks and feedback templates for team or contractor reviews.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">1-2 hrs/review</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 8: STRATEGY & GROWTH PLANNING -->
+<section class="category-section" id="cat7">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#129517;</div>
+            <div class="category-title">Strategy & Growth Planning</div>
+            <div class="category-desc">Make smarter decisions with data-driven strategy and automated market intelligence.</div>
+            <div class="category-connectors"><span class="connector-badge">Google Sheets</span><span class="connector-badge">Google Drive</span><span class="connector-badge">Computer Use</span></div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">Business strategy document creation</div><div class="use-case-desc">Creates comprehensive strategy documents with goals, milestones, and action plans for the next 12 months.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">3-5 hrs/quarter</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Competitive analysis reports</div><div class="use-case-desc">Researches competitors and creates detailed comparison reports with positioning recommendations.</div><div class="use-case-meta"><span class="meta-connector">Computer Use</span><span class="meta-connector">Local Files</span><span class="meta-time">3-5 hrs/quarter</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Market research and trend analysis</div><div class="use-case-desc">Analyses market trends, audience data, and industry shifts to inform your positioning.</div><div class="use-case-meta"><span class="meta-connector">Computer Use</span><span class="meta-connector">Google Sheets</span><span class="meta-time">2-4 hrs/month</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Offer design and pricing strategy</div><div class="use-case-desc">Creates offer structures, pricing models, and positioning documents based on market data and your costs.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Sheets</span><span class="meta-time">2-3 hrs/offer</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Brand positioning worksheets</div><div class="use-case-desc">Generates brand positioning frameworks, USP analysis, and differentiation strategies.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">2-3 hrs one-off</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Partnership and collaboration briefs</div><div class="use-case-desc">Creates outreach briefs and partnership proposals with clear value propositions for both parties.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Gmail</span><span class="meta-time">1-2 hrs/partnership</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Customer research and persona development</div><div class="use-case-desc">Analyses customer data and creates or updates ideal client profiles with demographics, pain points, and buying triggers.</div><div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Local Files</span><span class="meta-time">2-4 hrs/quarter</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">OKR and goal setting frameworks</div><div class="use-case-desc">Creates OKR documents with quarterly objectives, key results, and progress tracking systems.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">1-2 hrs/quarter</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 9: DATA ANALYSIS & REPORTING -->
+<section class="category-section" id="cat8">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#128202;</div>
+            <div class="category-title">Data Analysis & Reporting</div>
+            <div class="category-desc">Turn raw numbers into clear insights and automated reports that drive better decisions.</div>
+            <div class="category-connectors"><span class="connector-badge">Google Sheets</span><span class="connector-badge">Stripe</span><span class="connector-badge">HubSpot</span><span class="connector-badge">Local Files</span></div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">KPI dashboard creation</div><div class="use-case-desc">Builds comprehensive KPI dashboards in Google Sheets or Excel with charts, conditional formatting, and automated data feeds.</div><div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Stripe</span><span class="meta-time">3-5 hrs one-off</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Automated weekly business reports</div><div class="use-case-desc">Generates weekly performance reports from connected data sources. Delivered every Monday morning.</div><div class="use-case-meta"><span class="meta-connector">Scheduled Tasks</span><span class="meta-connector">Google Sheets</span><span class="meta-time">2-3 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Client retention analysis</div><div class="use-case-desc">Analyses client data to identify churn risks, retention patterns, and lifetime value trends.</div><div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">HubSpot</span><span class="meta-time">2-3 hrs/month</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Marketing ROI calculations</div><div class="use-case-desc">Computes return on marketing spend across channels with recommendations on where to invest more.</div><div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Stripe</span><span class="meta-time">1-2 hrs/month</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Revenue trend analysis</div><div class="use-case-desc">Identifies revenue trends, seasonal patterns, and growth trajectories with visual charts.</div><div class="use-case-meta"><span class="meta-connector">Stripe</span><span class="meta-connector">Google Sheets</span><span class="meta-time">1-2 hrs/month</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Survey and feedback analysis</div><div class="use-case-desc">Analyses survey responses and creates summary reports with actionable insights and themes.</div><div class="use-case-meta"><span class="meta-connector">Google Sheets</span><span class="meta-connector">Local Files</span><span class="meta-time">1-2 hrs/survey</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Financial data visualisation</div><div class="use-case-desc">Creates charts, graphs, and visual reports from raw financial data for presentations or reviews.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Sheets</span><span class="meta-time">1-2 hrs/report</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Custom report generation</div><div class="use-case-desc">Builds bespoke reports for any data source or combination. Just describe what you want to see.</div><div class="use-case-meta"><span class="meta-connector">All Connectors</span><span class="meta-time">Variable</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORY 10: FILE MANAGEMENT & ORGANISATION -->
+<section class="category-section" id="cat9">
+    <div class="category-inner">
+        <div class="category-header">
+            <div class="category-icon">&#128193;</div>
+            <div class="category-title">File Management & Organisation</div>
+            <div class="category-desc">Eliminate file chaos. Cowork organises, creates, and maintains your entire digital workspace.</div>
+            <div class="category-connectors"><span class="connector-badge">Google Drive</span><span class="connector-badge">Local Files</span><span class="connector-badge">Notion</span></div>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case"><div class="use-case-title">File organisation and cleanup</div><div class="use-case-desc">Sorts, renames, and restructures messy file systems into a clean, logical structure in one session.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">2-5 hrs one-off</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Template library creation</div><div class="use-case-desc">Creates a structured template library for all recurring documents: proposals, contracts, reports, packs.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">3-5 hrs one-off</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Document version control</div><div class="use-case-desc">Manages file versions, archives old versions, and maintains the current version as the single source of truth.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Automated filing system</div><div class="use-case-desc">Creates rules-based filing that sorts new documents into correct folders automatically based on content and type.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">1-2 hrs/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Batch file processing</div><div class="use-case-desc">Renames, converts, or processes multiple files at once. Rename 200 files, convert formats, extract data.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-time">1-3 hrs/batch</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+            <div class="use-case"><div class="use-case-title">Knowledge base creation</div><div class="use-case-desc">Compiles business knowledge into a structured, searchable reference that new team members can use.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Notion</span><span class="meta-time">5-10 hrs one-off</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Cloud sync and backup workflows</div><div class="use-case-desc">Sets up automated workflows to keep local and cloud files synchronised with version history.</div><div class="use-case-meta"><span class="meta-connector">Google Drive</span><span class="meta-connector">Local Files</span><span class="meta-time">1 hr/week</span><span class="meta-difficulty diff-medium">Medium</span></div></div>
+            <div class="use-case"><div class="use-case-title">Client file organisation</div><div class="use-case-desc">Creates standardised client folder structures with all required templates pre-populated for each new client.</div><div class="use-case-meta"><span class="meta-connector">Local Files</span><span class="meta-connector">Google Drive</span><span class="meta-time">30 min/client</span><span class="meta-difficulty diff-easy">Easy</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CONNECTOR REFERENCE -->
+<section class="connector-ref">
+    <div class="connector-ref-inner">
+        <h2>Connector Reference</h2>
+        <p class="subtitle">All major connectors and which business areas they serve</p>
+        <div class="connector-grid">
+            <div class="connector-card"><div class="connector-name">Gmail</div><div class="connector-cats">Email, Client Fulfilment, Sales, Team Management</div></div>
+            <div class="connector-card"><div class="connector-name">Google Drive</div><div class="connector-cats">Content, Client Fulfilment, Operations, Files, Strategy</div></div>
+            <div class="connector-card"><div class="connector-name">Google Calendar</div><div class="connector-cats">Client Fulfilment, Sales, Team Management, Email</div></div>
+            <div class="connector-card"><div class="connector-name">Google Sheets</div><div class="connector-cats">Operations, Financial, Data & Reporting, Sales</div></div>
+            <div class="connector-card"><div class="connector-name">HubSpot</div><div class="connector-cats">Sales, Client Management, Data & Reporting</div></div>
+            <div class="connector-card"><div class="connector-name">Slack</div><div class="connector-cats">Email & Communication, Team Management, Operations</div></div>
+            <div class="connector-card"><div class="connector-name">Stripe</div><div class="connector-cats">Financial Administration, Data & Reporting</div></div>
+            <div class="connector-card"><div class="connector-name">Notion</div><div class="connector-cats">Content, Operations, Team Management, Files</div></div>
+            <div class="connector-card"><div class="connector-name">Canva</div><div class="connector-cats">Content Marketing, Client Fulfilment</div></div>
+            <div class="connector-card"><div class="connector-name">Microsoft 365</div><div class="connector-cats">Email & Communication, Files, Operations</div></div>
+            <div class="connector-card"><div class="connector-name">Zapier</div><div class="connector-cats">Operations, Sales, Email, Content Marketing</div></div>
+            <div class="connector-card"><div class="connector-name">Jira</div><div class="connector-cats">Operations, Team Management</div></div>
+            <div class="connector-card"><div class="connector-name">Salesforce</div><div class="connector-cats">Sales, Client Management, Data & Reporting</div></div>
+            <div class="connector-card"><div class="connector-name">Figma</div><div class="connector-cats">Content Marketing, Design</div></div>
+            <div class="connector-card"><div class="connector-name">Local Files</div><div class="connector-cats">All Categories (Core Feature)</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- GETTING STARTED -->
+<section class="getting-started">
+    <div class="getting-started-inner">
+        <h2>Where Should You Start?</h2>
+        <p class="subtitle">Follow these steps to get the fastest ROI from Cowork</p>
+        <div class="priority-steps">
+            <div class="priority-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Take the Cowork Readiness Assessment</h3>
+                    <p>Answer 40 questions about your current workflows. Get a personalised report showing exactly which features to prioritise based on where you are wasting the most time.</p>
+                </div>
+            </div>
+            <div class="priority-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Start with your weakest area</h3>
+                    <p>Find the category where you scored lowest in the assessment. Focus on the Easy-rated use cases in that category first. Quick wins build momentum.</p>
+                </div>
+            </div>
+            <div class="priority-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Connect 2-3 key integrations</h3>
+                    <p>Most business owners get the highest ROI from Gmail, Google Drive, and one CRM or financial tool (HubSpot or Stripe). Start there.</p>
+                </div>
+            </div>
+            <div class="priority-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Set up your first scheduled automation</h3>
+                    <p>Pick one task you do every week manually. Set it up as a scheduled Cowork task. Once you see it running on autopilot, you will never go back.</p>
+                </div>
+            </div>
+            <div class="priority-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                    <h3>Expand one category per week</h3>
+                    <p>Each week, add 2-3 new use cases from the next priority category. Within 30 days, you will have transformed how your business runs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="cta-inner">
+        <h2>Ready to Get Started?</h2>
+        <p>Take the Cowork Readiness Assessment to get a personalised plan showing exactly which features to set up first based on your current workflows.</p>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; The Coach Consultant FitPro Ltd. All rights reserved.<br>
+    <a href="https://thecoachconsultant.uk">thecoachconsultant.uk</a></p>
+</footer>
+
+</body>
+</html>

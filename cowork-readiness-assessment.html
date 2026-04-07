@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cowork Readiness Assessment — The Coach Consultant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #6B9B9B;
+            --teal-dark: #5a8585;
+            --teal-light: #7ab0b0;
+            --teal-glow: rgba(107,155,155,0.3);
+            --black: #000000;
+            --white: #FFFFFF;
+            --dark-grey: #1A1A1A;
+            --mid-grey: #2A2A2A;
+            --light-grey: #E0E0E0;
+            --muted: #999999;
+            --bg-cream: #FAFAF8;
+            --red-pain: #E85D5D;
+            --red-subtle: rgba(232,93,93,0.08);
+            --amber: #F0A030;
+            --green: #4CAF50;
+            --green-light: rgba(76,175,80,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; color: var(--dark-grey); background: var(--white); line-height: 1.6; overflow-x: hidden; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes glowPulse { 0%, 100% { box-shadow: 0 4px 20px rgba(107,155,155,0.3); } 50% { box-shadow: 0 4px 40px rgba(107,155,155,0.6); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes countUp { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+
+        nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 1000; padding: 14px 0; border-bottom: 1px solid var(--light-grey); animation: slideDown 0.6s ease; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-weight: 700; font-size: 18px; color: var(--dark-grey); text-decoration: none; }
+        .nav-logo span { color: var(--teal); }
+
+        .hero { padding: 130px 24px 60px; background: linear-gradient(180deg, #fff 0%, var(--bg-cream) 100%); text-align: center; }
+        .hero-inner { max-width: 850px; margin: 0 auto; }
+        .hero-badge { display: inline-block; background: var(--teal); color: white; padding: 6px 18px; border-radius: 50px; font-size: 13px; font-weight: 600; margin-bottom: 24px; animation: fadeInUp 0.6s ease; }
+        .hero h1 { font-size: 42px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; animation: fadeInUp 0.6s ease 0.1s both; }
+        .hero h1 span { color: var(--teal); }
+        .hero p { font-size: 17px; color: var(--muted); max-width: 650px; margin: 0 auto 32px; animation: fadeInUp 0.6s ease 0.2s both; }
+        .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 32px; animation: fadeInUp 0.6s ease 0.3s both; }
+        .hero-stat { text-align: center; }
+        .hero-stat-number { font-size: 28px; font-weight: 800; color: var(--teal); }
+        .hero-stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+        .assessment { padding: 60px 24px 80px; background: var(--white); }
+        .assessment-inner { max-width: 750px; margin: 0 auto; }
+        .progress-container { margin-bottom: 40px; }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .progress-label { font-size: 14px; font-weight: 600; color: var(--dark-grey); }
+        .progress-count { font-size: 14px; color: var(--muted); }
+        .progress-bar { height: 8px; background: var(--light-grey); border-radius: 50px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--teal-light)); border-radius: 50px; transition: width 0.5s ease; }
+
+        .question-card { background: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; padding: 36px 32px; margin-bottom: 20px; transition: all 0.3s; display: none; }
+        .question-card.active { display: block; animation: fadeInUp 0.4s ease; }
+        .question-card:hover { border-color: var(--teal); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .question-category { display: inline-block; background: rgba(107,155,155,0.1); color: var(--teal); padding: 4px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .question-number { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+        .question-text { font-size: 20px; font-weight: 700; line-height: 1.4; margin-bottom: 24px; color: var(--dark-grey); }
+        .rating-options { display: grid; gap: 10px; }
+        .rating-option { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 2px solid var(--light-grey); border-radius: 12px; cursor: pointer; transition: all 0.25s; background: var(--white); }
+        .rating-option:hover { border-color: var(--teal); background: rgba(107,155,155,0.04); transform: translateX(4px); }
+        .rating-option.selected { border-color: var(--teal); background: rgba(107,155,155,0.08); }
+        .rating-score { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+        .score-1 { background: rgba(232,93,93,0.15); color: var(--red-pain); }
+        .score-2 { background: rgba(232,93,93,0.1); color: var(--red-pain); }
+        .score-3 { background: rgba(240,160,48,0.15); color: var(--amber); }
+        .score-4 { background: rgba(107,155,155,0.15); color: var(--teal); }
+        .score-5 { background: rgba(76,175,80,0.15); color: var(--green); }
+        .rating-label { font-size: 14px; font-weight: 500; color: var(--dark-grey); }
+        .question-nav { display: flex; justify-content: space-between; margin-top: 32px; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.3s; border: none; }
+        .btn-next { background: var(--teal); color: white; }
+        .btn-next:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 4px 20px var(--teal-glow); }
+        .btn-next:disabled { background: var(--light-grey); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-back { background: transparent; color: var(--muted); border: 1px solid var(--light-grey); }
+        .btn-back:hover { color: var(--dark-grey); border-color: var(--dark-grey); }
+        .btn-submit { background: var(--teal); color: white; width: 100%; padding: 18px; font-size: 17px; animation: glowPulse 3s infinite; }
+        .btn-submit:hover { background: var(--teal-dark); transform: translateY(-2px); }
+
+        .results { display: none; padding: 60px 24px 80px; }
+        .results.visible { display: block; }
+        .results-inner { max-width: 850px; margin: 0 auto; }
+        .score-hero { text-align: center; padding: 48px 32px; background: linear-gradient(135deg, var(--dark-grey) 0%, var(--mid-grey) 100%); border-radius: 20px; margin-bottom: 32px; animation: fadeInUp 0.6s ease; }
+        .score-hero-label { font-size: 14px; color: var(--muted); font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .score-hero-number { font-size: 80px; font-weight: 900; line-height: 1; margin-bottom: 4px; animation: countUp 0.8s ease 0.2s both; }
+        .score-hero-total { font-size: 24px; color: var(--muted); font-weight: 400; }
+        .score-hero-grade { font-size: 20px; font-weight: 700; margin-top: 12px; }
+        .score-hero-desc { font-size: 15px; color: rgba(255,255,255,0.7); max-width: 550px; margin: 12px auto 0; }
+        .grade-critical { color: var(--red-pain); }
+        .grade-needs-work { color: var(--amber); }
+        .grade-good { color: var(--teal-light); }
+        .grade-excellent { color: var(--green); }
+
+        .time-saved-hero { text-align: center; padding: 32px; background: linear-gradient(135deg, rgba(107,155,155,0.08), rgba(107,155,155,0.15)); border: 2px solid var(--teal); border-radius: 20px; margin-bottom: 32px; animation: fadeInUp 0.6s ease 0.1s both; }
+        .time-saved-label { font-size: 14px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .time-saved-number { font-size: 56px; font-weight: 900; color: var(--teal); line-height: 1; }
+        .time-saved-unit { font-size: 20px; font-weight: 600; color: var(--teal-dark); }
+        .time-saved-desc { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+        .category-scores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+        .category-card { background: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; padding: 24px; animation: fadeInUp 0.5s ease both; }
+        .category-name { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .category-score-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .category-score-num { font-size: 28px; font-weight: 800; }
+        .category-score-max { font-size: 14px; color: var(--muted); }
+        .category-bar { height: 6px; background: var(--light-grey); border-radius: 50px; overflow: hidden; }
+        .category-bar-fill { height: 100%; border-radius: 50px; transition: width 1s ease; }
+
+        .recommendations { margin-bottom: 32px; }
+        .recommendations h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; animation: fadeInUp 0.5s ease 0.3s both; }
+        .recommendations .rec-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 20px; animation: fadeInUp 0.5s ease 0.35s both; }
+        .rec-card { background: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; padding: 24px; margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start; animation: fadeInUp 0.4s ease both; }
+        .rec-priority { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+        .priority-high { background: rgba(232,93,93,0.12); color: var(--red-pain); }
+        .priority-medium { background: rgba(240,160,48,0.12); color: var(--amber); }
+        .rec-content h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .rec-content p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+        .rec-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 50px; margin-top: 8px; margin-right: 6px; }
+        .tag-connector { background: rgba(107,155,155,0.1); color: var(--teal); }
+        .tag-time { background: rgba(76,175,80,0.1); color: var(--green); }
+        .tag-feature { background: rgba(240,160,48,0.1); color: var(--amber); }
+
+        .sprint-plan { margin-bottom: 32px; }
+        .sprint-plan h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; animation: fadeInUp 0.5s ease 0.4s both; }
+        .sprint-plan .sprint-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 24px; animation: fadeInUp 0.5s ease 0.45s both; }
+        .sprint-week { margin-bottom: 20px; animation: fadeInUp 0.4s ease both; }
+        .sprint-week-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .sprint-week-badge { background: var(--teal); color: white; padding: 6px 16px; border-radius: 50px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        .sprint-week-badge.day1 { background: var(--red-pain); }
+        .sprint-week-badge.w1 { background: var(--amber); }
+        .sprint-week-badge.w2 { background: var(--teal); }
+        .sprint-week-badge.w3 { background: var(--teal-dark); }
+        .sprint-week-badge.w4 { background: var(--dark-grey); }
+        .sprint-week-title { font-size: 16px; font-weight: 700; color: var(--dark-grey); }
+        .sprint-tasks { display: grid; gap: 8px; }
+        .sprint-task { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: var(--white); border: 1px solid var(--light-grey); border-radius: 12px; transition: all 0.2s; }
+        .sprint-task:hover { border-color: var(--teal); transform: translateX(4px); }
+        .sprint-check { width: 22px; height: 22px; border: 2px solid var(--light-grey); border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+        .sprint-task-content { flex: 1; }
+        .sprint-task-title { font-size: 14px; font-weight: 600; color: var(--dark-grey); }
+        .sprint-task-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .sprint-task-connector { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 50px; background: rgba(107,155,155,0.1); color: var(--teal); margin-top: 4px; }
+        .sprint-task-time { font-size: 11px; color: var(--amber); font-weight: 600; margin-left: 6px; }
+        .sprint-divider { height: 1px; background: var(--light-grey); margin: 24px 0; }
+
+        .results-cta { background: linear-gradient(135deg, var(--dark-grey) 0%, var(--mid-grey) 100%); border-radius: 20px; padding: 48px 32px; text-align: center; animation: fadeInUp 0.5s ease 0.5s both; }
+        .results-cta h2 { font-size: 28px; font-weight: 800; color: white; margin-bottom: 12px; }
+        .results-cta p { font-size: 16px; color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto 24px; }
+        .cta-btn { display: inline-block; background: var(--teal); color: white; padding: 16px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; transition: all 0.3s; animation: glowPulse 3s infinite; }
+        .cta-btn:hover { background: var(--teal-dark); transform: translateY(-2px); }
+
+        footer { padding: 32px 24px; text-align: center; border-top: 1px solid var(--light-grey); }
+        footer p { font-size: 13px; color: var(--muted); }
+        footer a { color: var(--teal); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 30px; }
+            .hero p { font-size: 15px; }
+            .hero-stats { flex-direction: column; gap: 16px; }
+            .question-card { padding: 24px 20px; }
+            .question-text { font-size: 17px; }
+            .category-scores { grid-template-columns: 1fr 1fr; }
+            .score-hero-number { font-size: 60px; }
+            .time-saved-number { font-size: 40px; }
+            .results-cta { padding: 32px 20px; }
+            .results-cta h2 { font-size: 22px; }
+        }
+        @media (max-width: 480px) {
+            .category-scores { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="https://thecoachconsultant.uk" class="nav-logo">The Coach <span>Consultant</span></a>
+    </div>
+</nav>
+
+<section class="hero" id="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">Claude Cowork Readiness Assessment</div>
+        <h1>Discover Which <span>Cowork</span> Systems Will Save You The Most Time</h1>
+        <p>Answer 40 questions about how you currently run your business. Get a personalised report showing exactly which Cowork features, connectors, and automations will have the highest ROI for you.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-number">8 min</div>
+                <div class="hero-stat-label">To Complete</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">40</div>
+                <div class="hero-stat-label">Questions</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">10</div>
+                <div class="hero-stat-label">Key Areas</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">Instant</div>
+                <div class="hero-stat-label">Cowork Plan</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="assessment" id="assessment">
+    <div class="assessment-inner">
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-label" id="progressSection">Content Creation & Marketing</span>
+                <span class="progress-count"><span id="currentQ">1</span> of 40</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 2.5%"></div>
+            </div>
+        </div>
+        <div id="questionsContainer"></div>
+    </div>
+</section>
+
+<section class="results" id="results">
+    <div class="results-inner">
+        <div class="score-hero" id="scoreHero"></div>
+        <div class="time-saved-hero" id="timeSavedHero"></div>
+        <div class="category-scores" id="categoryScores"></div>
+        <div class="recommendations" id="recommendations">
+            <h2>Your Priority Cowork Setup Plan</h2>
+            <p class="rec-subtitle">These are ranked by time saved and business impact. Start at number 1 and work down.</p>
+            <div id="recCards"></div>
+        </div>
+        <div class="sprint-plan" id="sprintPlan">
+            <h2>Your Personalised 30-Day Cowork Setup Plan</h2>
+            <p class="sprint-subtitle">Based on your scores, here is your custom implementation order. Follow it week by week for the fastest results.</p>
+            <div id="sprintContent"></div>
+        </div>
+
+        <div class="results-cta">
+            <h2>Ready to Set Up Your Cowork System?</h2>
+            <p>Use the Complete Cowork Functionality List to find step-by-step guidance on every feature and connector recommended above. Start with your highest priority items and work through them one by one.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; The Coach Consultant FitPro Ltd. All rights reserved.<br>
+    <a href="https://thecoachconsultant.uk">thecoachconsultant.uk</a></p>
+</footer>
+
+<script>
+const questions = [
+    // SECTION 0: CONTENT CREATION & MARKETING (Q0-Q3)
+    { category: "Content Creation & Marketing", section: 0, text: "How much time do you spend each week creating content (social media posts, emails, blog articles, videos)?", options: [
+        { score: 1, label: "I barely create any content because I never have time" },
+        { score: 2, label: "5-10 hours per week, mostly writing everything from scratch" },
+        { score: 3, label: "3-5 hours per week, I use some templates but it is still manual" },
+        { score: 4, label: "1-3 hours per week, I have systems and repurpose regularly" },
+        { score: 5, label: "Under 1 hour per week, most of my content creation is automated or batched" }
+    ]},
+    { category: "Content Creation & Marketing", section: 0, text: "Do you repurpose content across multiple channels (turning one piece into social posts, emails, blog content)?", options: [
+        { score: 1, label: "No, I create separate content for each channel from scratch every time" },
+        { score: 2, label: "Occasionally, but I do it manually and it takes ages" },
+        { score: 3, label: "I repurpose some content but it is inconsistent and ad hoc" },
+        { score: 4, label: "I have a rough system for repurposing across 2-3 channels" },
+        { score: 5, label: "Every piece of content gets systematically repurposed across all my channels" }
+    ]},
+    { category: "Content Creation & Marketing", section: 0, text: "How do you currently plan and schedule your content calendar?", options: [
+        { score: 1, label: "I have no content calendar, I post when I remember" },
+        { score: 2, label: "I have a rough plan in my head but nothing written down" },
+        { score: 3, label: "I use a basic spreadsheet or notes app updated manually each week" },
+        { score: 4, label: "I use a scheduling tool and plan 1-2 weeks ahead consistently" },
+        { score: 5, label: "I batch plan and schedule 4+ weeks ahead with a clear system that runs on autopilot" }
+    ]},
+    { category: "Content Creation & Marketing", section: 0, text: "Are you using AI tools to help with copywriting, ideation, or content drafts?", options: [
+        { score: 1, label: "No, I write everything manually from scratch" },
+        { score: 2, label: "I have tried AI but do not use it regularly" },
+        { score: 3, label: "I use AI occasionally for ideas or rough drafts but still rewrite most of it" },
+        { score: 4, label: "I use AI daily with prompts trained on my voice and style" },
+        { score: 5, label: "AI handles first drafts across all channels, trained on my brand, saving me 10+ hours per week" }
+    ]},
+
+    // SECTION 1: CLIENT MANAGEMENT & FULFILMENT (Q4-Q7)
+    { category: "Client Management & Fulfilment", section: 1, text: "How do you currently onboard new clients?", options: [
+        { score: 1, label: "No formal process, I just start working with them" },
+        { score: 2, label: "I send a welcome email but everything else is ad hoc" },
+        { score: 3, label: "I have a rough checklist but do each step manually every time" },
+        { score: 4, label: "I have a documented onboarding process with templates I fill in" },
+        { score: 5, label: "Fully automated onboarding with welcome pack, forms, calendar booking, and follow-ups" }
+    ]},
+    { category: "Client Management & Fulfilment", section: 1, text: "How do you track client progress, sessions, and deliverables?", options: [
+        { score: 1, label: "Everything is in my head or scattered across random notes" },
+        { score: 2, label: "I use a basic spreadsheet but rarely update it" },
+        { score: 3, label: "I track sessions in a calendar but do not have a system for progress or deliverables" },
+        { score: 4, label: "I have a client tracker I update after each session with notes and next steps" },
+        { score: 5, label: "Comprehensive CRM or system that tracks every touchpoint, deliverable, and milestone automatically" }
+    ]},
+    { category: "Client Management & Fulfilment", section: 1, text: "How do you prepare for client sessions or deliver reports to clients?", options: [
+        { score: 1, label: "I do not prepare, I just show up and figure it out" },
+        { score: 2, label: "I glance at previous notes 5 minutes before the call" },
+        { score: 3, label: "I review notes and prepare a rough agenda manually each time" },
+        { score: 4, label: "I have a prep template I fill in before every session" },
+        { score: 5, label: "Pre-session briefing with all history, metrics, and discussion points compiled automatically" }
+    ]},
+    { category: "Client Management & Fulfilment", section: 1, text: "Do you have a system for offboarding clients and generating referrals or testimonials?", options: [
+        { score: 1, label: "No, clients just stop booking and I move on" },
+        { score: 2, label: "I sometimes ask for a testimonial but there is no system" },
+        { score: 3, label: "I ask for testimonials at the end but have no referral system" },
+        { score: 4, label: "I have a basic offboarding process with testimonial and referral requests" },
+        { score: 5, label: "Structured offboarding with automatic testimonial request, referral incentive, and re-engagement sequence" }
+    ]},
+
+    // SECTION 2: SALES & LEAD GENERATION (Q8-Q11)
+    { category: "Sales & Lead Generation", section: 2, text: "How do you currently manage your sales pipeline and follow-ups?", options: [
+        { score: 1, label: "I have no pipeline, I just hope people buy" },
+        { score: 2, label: "I have a rough idea of who I am talking to but nothing tracked" },
+        { score: 3, label: "I use a basic spreadsheet or notes but follow-up is inconsistent" },
+        { score: 4, label: "I track leads in a CRM or sheet and follow up within a few days" },
+        { score: 5, label: "Full pipeline management with automated follow-up sequences, lead scoring, and weekly reviews" }
+    ]},
+    { category: "Sales & Lead Generation", section: 2, text: "How much time do you spend on lead generation activities each week (outreach, DMs, networking, ads)?", options: [
+        { score: 1, label: "Almost none, I rely on word of mouth or hope" },
+        { score: 2, label: "1-2 hours per week when I remember" },
+        { score: 3, label: "3-5 hours per week with some consistency" },
+        { score: 4, label: "5-10 hours per week with a structured daily routine" },
+        { score: 5, label: "10+ hours per week, mostly automated with outreach sequences and ads running" }
+    ]},
+    { category: "Sales & Lead Generation", section: 2, text: "Do you have landing pages, lead magnets, or automated funnels driving leads?", options: [
+        { score: 1, label: "No landing pages or lead magnets at all" },
+        { score: 2, label: "I have a basic website but no specific lead capture" },
+        { score: 3, label: "I have a lead magnet but promote it infrequently" },
+        { score: 4, label: "Active lead magnet with a landing page and basic email follow-up" },
+        { score: 5, label: "Multiple funnels running with lead magnets, automated email sequences, and retargeting" }
+    ]},
+    { category: "Sales & Lead Generation", section: 2, text: "How do you write and send sales proposals or pitch documents?", options: [
+        { score: 1, label: "I do not use proposals, I just discuss price on calls" },
+        { score: 2, label: "I write each proposal from scratch every time" },
+        { score: 3, label: "I have a rough template but still spend 30-60 minutes per proposal" },
+        { score: 4, label: "I have a polished template I customise in 10-15 minutes" },
+        { score: 5, label: "Proposals are mostly automated with client-specific details populated from our call notes" }
+    ]},
+
+    // SECTION 3: OPERATIONS & SYSTEMS (Q12-Q15)
+    { category: "Operations & Systems", section: 3, text: "Do you have documented SOPs (standard operating procedures) for your recurring business tasks?", options: [
+        { score: 1, label: "No documentation, everything lives in my head" },
+        { score: 2, label: "A few rough notes but nothing anyone else could follow" },
+        { score: 3, label: "Some processes documented but most are incomplete or outdated" },
+        { score: 4, label: "Key processes documented with step-by-step instructions" },
+        { score: 5, label: "Comprehensive SOP library that is regularly updated and could run the business without me" }
+    ]},
+    { category: "Operations & Systems", section: 3, text: "How many different tools and apps do you use daily to run your business?", options: [
+        { score: 1, label: "10+ tools and I constantly switch between them with no integration" },
+        { score: 2, label: "7-10 tools with minimal connection between them" },
+        { score: 3, label: "5-7 tools with some integrations via Zapier or similar" },
+        { score: 4, label: "4-6 well-chosen tools that are mostly connected" },
+        { score: 5, label: "A lean, integrated tech stack where data flows between tools automatically" }
+    ]},
+    { category: "Operations & Systems", section: 3, text: "How do you handle repetitive admin tasks (data entry, file management, scheduling, reporting)?", options: [
+        { score: 1, label: "I do everything manually and it eats up hours every day" },
+        { score: 2, label: "Mostly manual with the occasional shortcut" },
+        { score: 3, label: "Some tasks are partially automated but most still need manual work" },
+        { score: 4, label: "Key repetitive tasks are automated, freeing up a few hours per week" },
+        { score: 5, label: "Nearly all admin is automated or delegated, I rarely touch repetitive tasks" }
+    ]},
+    { category: "Operations & Systems", section: 3, text: "How do you track business performance (KPIs, revenue, conversion rates, client metrics)?", options: [
+        { score: 1, label: "I do not track any metrics, I just look at my bank balance" },
+        { score: 2, label: "I check revenue monthly but do not track leading indicators" },
+        { score: 3, label: "I track a few numbers manually in a spreadsheet" },
+        { score: 4, label: "I have a dashboard or report I review weekly with key metrics" },
+        { score: 5, label: "Automated reporting with dashboards that update in real time across all business areas" }
+    ]},
+
+    // SECTION 4: FINANCIAL ADMINISTRATION (Q16-Q19)
+    { category: "Financial Administration", section: 4, text: "How do you manage invoicing, payments, and expense tracking?", options: [
+        { score: 1, label: "Manually, inconsistently, and I often forget to invoice on time" },
+        { score: 2, label: "I use basic invoicing software but chase payments manually" },
+        { score: 3, label: "Invoicing is mostly systematic but expense tracking is a mess" },
+        { score: 4, label: "Invoicing automated, expenses tracked monthly, bookkeeper handles the rest" },
+        { score: 5, label: "Fully automated invoicing, payment reminders, expense categorisation, and monthly reconciliation" }
+    ]},
+    { category: "Financial Administration", section: 4, text: "How long does it take you to prepare your monthly financial overview or reports for your accountant?", options: [
+        { score: 1, label: "Hours of stress and I usually put it off for weeks" },
+        { score: 2, label: "A full afternoon pulling numbers from different places" },
+        { score: 3, label: "1-2 hours gathering data and putting it into a spreadsheet" },
+        { score: 4, label: "Under an hour because most data is already organised" },
+        { score: 5, label: "Under 15 minutes, reports generate automatically and I just review" }
+    ]},
+    { category: "Financial Administration", section: 4, text: "Do you forecast revenue, track cash flow, or plan financially beyond the current month?", options: [
+        { score: 1, label: "No, I have no idea what next month looks like financially" },
+        { score: 2, label: "I have a rough sense but nothing written down" },
+        { score: 3, label: "I do basic forecasting quarterly but it is guesswork" },
+        { score: 4, label: "Monthly forecasting based on pipeline and recurring revenue data" },
+        { score: 5, label: "Rolling financial model with scenario planning, updated weekly from real data" }
+    ]},
+    { category: "Financial Administration", section: 4, text: "How do you handle receipt management, categorisation, and tax preparation?", options: [
+        { score: 1, label: "Receipts in a shoebox, panic at tax time" },
+        { score: 2, label: "I save receipts digitally but never categorise them" },
+        { score: 3, label: "Receipts saved and roughly categorised quarterly" },
+        { score: 4, label: "Receipts captured and categorised monthly in an organised system" },
+        { score: 5, label: "Receipts auto-captured, categorised in real time, tax-ready at all times" }
+    ]},
+
+    // SECTION 5: EMAIL & COMMUNICATION (Q20-Q23)
+    { category: "Email & Communication", section: 5, text: "How much time do you spend on email each day?", options: [
+        { score: 1, label: "2+ hours, I am constantly in my inbox and it controls my day" },
+        { score: 2, label: "1-2 hours, I check constantly and reply as they come in" },
+        { score: 3, label: "30-60 minutes, I batch check 2-3 times per day" },
+        { score: 4, label: "15-30 minutes, I have templates and a system for processing" },
+        { score: 5, label: "Under 15 minutes, most responses are automated or templated and I process at set times" }
+    ]},
+    { category: "Email & Communication", section: 5, text: "Do you have email templates or automated sequences for common communications (enquiries, follow-ups, confirmations)?", options: [
+        { score: 1, label: "No, I write every email from scratch" },
+        { score: 2, label: "I have a few saved replies but do not use them consistently" },
+        { score: 3, label: "Templates for the most common emails but still lots of manual writing" },
+        { score: 4, label: "Templates for most scenarios with automated sequences for key workflows" },
+        { score: 5, label: "Comprehensive template library plus automated sequences that handle 80%+ of communications" }
+    ]},
+    { category: "Email & Communication", section: 5, text: "How do you manage communication across channels (email, DMs, Slack, WhatsApp, text)?", options: [
+        { score: 1, label: "Messages scattered everywhere, I constantly miss things" },
+        { score: 2, label: "I try to check everything but regularly miss or forget responses" },
+        { score: 3, label: "I check each channel separately but have no unified system" },
+        { score: 4, label: "I have set times for each channel and rarely miss messages" },
+        { score: 5, label: "Unified system or workflow that captures and routes all communications efficiently" }
+    ]},
+    { category: "Email & Communication", section: 5, text: "Do you use AI to help draft emails, responses, or communication templates?", options: [
+        { score: 1, label: "No, I write everything manually" },
+        { score: 2, label: "Occasionally for complex emails but not regularly" },
+        { score: 3, label: "I use AI for some drafts but still spend time editing extensively" },
+        { score: 4, label: "AI drafts most of my communications and I review quickly before sending" },
+        { score: 5, label: "AI handles first drafts for nearly all communications, trained on my voice, minimal editing needed" }
+    ]},
+
+    // SECTION 6: TEAM & DELEGATION (Q24-Q27)
+    { category: "Team & Delegation", section: 6, text: "Do you currently have a team, VA, or contractors helping in your business?", options: [
+        { score: 1, label: "No, I do absolutely everything myself" },
+        { score: 2, label: "I have tried outsourcing but it did not work out" },
+        { score: 3, label: "I have occasional freelance help for specific projects" },
+        { score: 4, label: "I have a part-time VA or 1-2 regular contractors" },
+        { score: 5, label: "I have a reliable team handling their areas with clear responsibilities and minimal oversight" }
+    ]},
+    { category: "Team & Delegation", section: 6, text: "How do you delegate tasks and communicate expectations to others (or would if you had help)?", options: [
+        { score: 1, label: "I do not delegate because it is faster to do it myself" },
+        { score: 2, label: "I delegate verbally but things often get lost or done wrong" },
+        { score: 3, label: "I send task descriptions via message but follow up manually" },
+        { score: 4, label: "I use a project management tool with clear briefs and deadlines" },
+        { score: 5, label: "Documented SOPs, templated briefs, and a project management system that makes delegation seamless" }
+    ]},
+    { category: "Team & Delegation", section: 6, text: "How much of your time is spent on tasks that someone (or something) else could handle?", options: [
+        { score: 1, label: "Almost all of it, I am stuck doing things that are not worth my hourly rate" },
+        { score: 2, label: "Most of my week, probably 70-80% is below my pay grade" },
+        { score: 3, label: "About half my time is on tasks I should not be doing" },
+        { score: 4, label: "20-30% of my time, but I still find it hard to let go" },
+        { score: 5, label: "Under 10%, I focus almost entirely on high-value activities" }
+    ]},
+    { category: "Team & Delegation", section: 6, text: "If you could hand off tasks to an AI agent right now, how confident are you it would be done correctly?", options: [
+        { score: 1, label: "Not at all, I would not trust it with anything important" },
+        { score: 2, label: "Slightly, but I would need to check everything thoroughly" },
+        { score: 3, label: "Somewhat, for simple tasks I could probably trust the output" },
+        { score: 4, label: "Fairly confident for most tasks if I set up good instructions" },
+        { score: 5, label: "Very confident, I already use AI tools effectively and understand how to instruct them" }
+    ]},
+
+    // SECTION 7: STRATEGY & PLANNING (Q28-Q31)
+    { category: "Strategy & Planning", section: 7, text: "How do you currently approach weekly and monthly business planning?", options: [
+        { score: 1, label: "I do not plan, I just react to whatever comes up each day" },
+        { score: 2, label: "I think about what to do but rarely write it down" },
+        { score: 3, label: "I do a rough weekly plan but do not stick to it" },
+        { score: 4, label: "Weekly planning session with priorities and monthly goals" },
+        { score: 5, label: "Structured weekly planning, monthly review, quarterly strategy, all tracked with clear KPIs" }
+    ]},
+    { category: "Strategy & Planning", section: 7, text: "Do you use data and analytics to inform your business decisions?", options: [
+        { score: 1, label: "No, I go with gut feeling for everything" },
+        { score: 2, label: "I look at basic analytics occasionally but do not act on them" },
+        { score: 3, label: "I review some data monthly but analysis is surface level" },
+        { score: 4, label: "I regularly review analytics and adjust strategy based on data" },
+        { score: 5, label: "Data-driven decision making with automated reporting, trend analysis, and clear metrics for every initiative" }
+    ]},
+    { category: "Strategy & Planning", section: 7, text: "How do you research your market, competitors, and industry trends?", options: [
+        { score: 1, label: "I do not do market research at all" },
+        { score: 2, label: "I occasionally browse competitors' social media" },
+        { score: 3, label: "I check competitors and trends a few times per month" },
+        { score: 4, label: "Monthly competitive analysis and trend monitoring" },
+        { score: 5, label: "Systematic research with automated monitoring, competitor tracking, and trend analysis feeding into strategy" }
+    ]},
+    { category: "Strategy & Planning", section: 7, text: "Do you have a documented business strategy with clear milestones for the next 12 months?", options: [
+        { score: 1, label: "No strategy document, I am making it up as I go" },
+        { score: 2, label: "A vague idea of where I want to be but nothing written" },
+        { score: 3, label: "High-level goals written down but no specific milestones or action plans" },
+        { score: 4, label: "Clear quarterly goals with milestones and action steps" },
+        { score: 5, label: "Comprehensive 12-month strategy with monthly milestones, KPIs, and regular reviews" }
+    ]},
+
+    // SECTION 8: DATA & REPORTING (Q32-Q35)
+    { category: "Data & Reporting", section: 8, text: "How do you currently create reports for your business (financial, client, marketing performance)?", options: [
+        { score: 1, label: "I do not create any reports" },
+        { score: 2, label: "I pull numbers manually into a spreadsheet when forced to" },
+        { score: 3, label: "I create basic reports monthly but it takes significant time" },
+        { score: 4, label: "Regular reporting with templates that I populate with current data" },
+        { score: 5, label: "Automated reports generated on schedule with data pulled from connected tools" }
+    ]},
+    { category: "Data & Reporting", section: 8, text: "Do you have a central place where all your business data lives?", options: [
+        { score: 1, label: "No, data is scattered across 10+ different tools and platforms" },
+        { score: 2, label: "Mostly scattered but I know where to find most things" },
+        { score: 3, label: "Some data is centralised but key metrics require checking multiple sources" },
+        { score: 4, label: "Most data is accessible from 1-2 central systems" },
+        { score: 5, label: "All key business data flows into a central dashboard or system with minimal manual input" }
+    ]},
+    { category: "Data & Reporting", section: 8, text: "How do you analyse client data to improve retention, satisfaction, and lifetime value?", options: [
+        { score: 1, label: "I do not analyse client data at all" },
+        { score: 2, label: "I notice patterns anecdotally but do not track anything" },
+        { score: 3, label: "I review client outcomes occasionally but not systematically" },
+        { score: 4, label: "I track retention rates and satisfaction and review quarterly" },
+        { score: 5, label: "Comprehensive client analytics with churn prediction, satisfaction tracking, and lifetime value calculations" }
+    ]},
+    { category: "Data & Reporting", section: 8, text: "How confident are you reading and acting on data from spreadsheets, analytics tools, or dashboards?", options: [
+        { score: 1, label: "Not at all, spreadsheets overwhelm me" },
+        { score: 2, label: "I can read basic numbers but struggle with analysis" },
+        { score: 3, label: "Comfortable with basic data but advanced analysis is beyond me" },
+        { score: 4, label: "Fairly confident with most data and can spot trends" },
+        { score: 5, label: "Very confident, I regularly analyse complex data sets and make decisions from them" }
+    ]},
+
+    // SECTION 9: FILE MANAGEMENT & ORGANISATION (Q36-Q39)
+    { category: "File Management & Organisation", section: 9, text: "How organised are your digital files (documents, client files, templates, resources)?", options: [
+        { score: 1, label: "Chaos, files everywhere with no naming convention or structure" },
+        { score: 2, label: "Somewhat organised but I waste time searching for things regularly" },
+        { score: 3, label: "Reasonably organised but there are messy areas I keep avoiding" },
+        { score: 4, label: "Well organised with a clear folder structure and naming conventions" },
+        { score: 5, label: "Immaculate, every file has a home, naming is consistent, and I can find anything in seconds" }
+    ]},
+    { category: "File Management & Organisation", section: 9, text: "How do you currently handle document creation (proposals, contracts, client packs, presentations)?", options: [
+        { score: 1, label: "I create everything from blank documents every single time" },
+        { score: 2, label: "I have a few old documents I copy and edit but they are outdated" },
+        { score: 3, label: "I have some templates but still spend 30+ minutes customising each one" },
+        { score: 4, label: "Good template library that I can customise quickly for each client" },
+        { score: 5, label: "Templated system where documents auto-populate with client data and are ready to send in minutes" }
+    ]},
+    { category: "File Management & Organisation", section: 9, text: "How do you back up and protect your important business files?", options: [
+        { score: 1, label: "I do not back up anything, files live on one device" },
+        { score: 2, label: "Some files are in cloud storage but backup is inconsistent" },
+        { score: 3, label: "Most files are in cloud storage but not systematically organised" },
+        { score: 4, label: "Files backed up to cloud with a clear structure and version control" },
+        { score: 5, label: "Automated backup system with cloud storage, version history, and disaster recovery plan" }
+    ]},
+    { category: "File Management & Organisation", section: 9, text: "How much time per week do you spend on file-related admin (searching, renaming, organising, moving files)?", options: [
+        { score: 1, label: "Multiple hours per week, it is a constant frustration" },
+        { score: 2, label: "1-2 hours per week searching for things and tidying up" },
+        { score: 3, label: "30-60 minutes per week, manageable but annoying" },
+        { score: 4, label: "Under 30 minutes, my system is mostly self-maintaining" },
+        { score: 5, label: "Almost none, my file system is automated and self-organising" }
+    ]}
+];
+
+const sectionNames = ["Content Creation & Marketing", "Client Management & Fulfilment", "Sales & Lead Generation", "Operations & Systems", "Financial Administration", "Email & Communication", "Team & Delegation", "Strategy & Planning", "Data & Reporting", "File Management & Organisation"];
+const sectionIcons = ["\u270F\uFE0F", "\uD83D\uDC65", "\uD83C\uDFAF", "\u2699\uFE0F", "\uD83D\uDCB7", "\u2709\uFE0F", "\uD83E\uDD1D", "\uD83E\uDDED", "\uD83D\uDCCA", "\uD83D\uDCC1"];
+const answers = {};
+let currentQuestion = 0;
+
+function renderQuestions() {
+    const container = document.getElementById('questionsContainer');
+    let html = '';
+    questions.forEach((q, i) => {
+        html += `
+        <div class="question-card ${i === 0 ? 'active' : ''}" id="q${i}">
+            <span class="question-category">${q.category}</span>
+            <div class="question-number">Question ${i + 1} of ${questions.length}</div>
+            <div class="question-text">${q.text}</div>
+            <div class="rating-options">
+                ${q.options.map(opt => `
+                    <div class="rating-option" onclick="selectAnswer(${i}, ${opt.score}, this)">
+                        <div class="rating-score score-${opt.score}">${opt.score}</div>
+                        <div class="rating-label">${opt.label}</div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="question-nav">
+                <button class="btn btn-back" onclick="prevQuestion()" ${i === 0 ? 'style="visibility:hidden"' : ''}>Back</button>
+                ${i < questions.length - 1 ?
+                    `<button class="btn btn-next" id="nextBtn${i}" onclick="nextQuestion()" disabled>Next</button>` :
+                    `<button class="btn btn-submit" id="nextBtn${i}" onclick="showResults()" disabled>Get My Cowork Plan</button>`
+                }
+            </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function selectAnswer(qIndex, score, el) {
+    answers[qIndex] = score;
+    const card = document.getElementById(`q${qIndex}`);
+    card.querySelectorAll('.rating-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById(`nextBtn${qIndex}`).disabled = false;
+}
+
+function nextQuestion() {
+    if (currentQuestion >= questions.length - 1) return;
+    document.getElementById(`q${currentQuestion}`).classList.remove('active');
+    currentQuestion++;
+    document.getElementById(`q${currentQuestion}`).classList.add('active');
+    updateProgress();
+}
+
+function prevQuestion() {
+    if (currentQuestion <= 0) return;
+    document.getElementById(`q${currentQuestion}`).classList.remove('active');
+    currentQuestion--;
+    document.getElementById(`q${currentQuestion}`).classList.add('active');
+    updateProgress();
+}
+
+function updateProgress() {
+    document.getElementById('currentQ').textContent = currentQuestion + 1;
+    document.getElementById('progressFill').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+    document.getElementById('progressSection').textContent = questions[currentQuestion].category;
+}
+
+function showResults() {
+    document.getElementById('assessment').style.display = 'none';
+    document.getElementById('hero').style.display = 'none';
+    document.getElementById('results').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const totalScore = Object.values(answers).reduce((a, b) => a + b, 0);
+    const maxScore = questions.length * 5;
+    const pct = Math.round((totalScore / maxScore) * 100);
+
+    let grade, gradeClass, gradeDesc;
+    if (pct < 30) { grade = "Major Automation Opportunity"; gradeClass = "grade-critical"; gradeDesc = "Your business is running almost entirely on manual effort. The good news? Cowork can automate huge chunks of what you do every day. The recommendations below show you exactly where to start for maximum impact."; }
+    else if (pct < 50) { grade = "Significant Time Being Wasted"; gradeClass = "grade-needs-work"; gradeDesc = "You have some systems in place but there are clear gaps where Cowork could save you 10-20 hours per week. The priorities below will have the fastest impact on your time and revenue."; }
+    else if (pct < 70) { grade = "Good Foundation, Ready to Scale"; gradeClass = "grade-good"; gradeDesc = "You are running a decent operation but there is still significant room to automate and systematise. Cowork can take what you have built and put it on autopilot."; }
+    else { grade = "Strong Systems, Time to Supercharge"; gradeClass = "grade-excellent"; gradeDesc = "Your business is well organised. Cowork will add leverage to your existing systems and free up time for the highest value activities only you can do."; }
+
+    document.getElementById('scoreHero').innerHTML = `
+        <div class="score-hero-label">Your Cowork Readiness Score</div>
+        <div class="score-hero-number ${gradeClass}">${totalScore}</div>
+        <div class="score-hero-total">out of ${maxScore}</div>
+        <div class="score-hero-grade ${gradeClass}">${grade}</div>
+        <div class="score-hero-desc">${gradeDesc}</div>`;
+
+    const catScores = {}; const catMax = {};
+    questions.forEach((q, i) => {
+        const cat = q.category;
+        if (!catScores[cat]) { catScores[cat] = 0; catMax[cat] = 0; }
+        catScores[cat] += answers[i] || 0;
+        catMax[cat] += 5;
+    });
+
+    let catHTML = '';
+    sectionNames.forEach((cat, idx) => {
+        const score = catScores[cat] || 0;
+        const max = catMax[cat] || 1;
+        const p = Math.round((score / max) * 100);
+        let color = p < 40 ? 'var(--red-pain)' : p < 60 ? 'var(--amber)' : p < 80 ? 'var(--teal)' : 'var(--green)';
+        catHTML += `
+        <div class="category-card" style="animation-delay:${0.1 + idx * 0.05}s">
+            <div class="category-name">${sectionIcons[idx]} ${cat}</div>
+            <div class="category-score-row">
+                <div class="category-score-num" style="color:${color}">${score}</div>
+                <div class="category-score-max">/ ${max}</div>
+            </div>
+            <div class="category-bar"><div class="category-bar-fill" style="width:${p}%;background:${color};"></div></div>
+        </div>`;
+    });
+    document.getElementById('categoryScores').innerHTML = catHTML;
+
+    // RECOMMENDATION MAP
+    const recMap = [
+        // Content Creation & Marketing (Q0-Q3)
+        { q: 0, t: 3, p: "high", title: "Automate Content Creation with Cowork Projects", desc: "Set up a Cowork Project with your brand voice, content pillars, and style guide. Cowork will draft posts, emails, and articles in your voice, cutting content creation from hours to minutes.", connectors: ["Google Drive", "Canva"], timeSaved: "5-8 hrs/week", feature: "Projects + Local Files" },
+        { q: 1, t: 3, p: "high", title: "Build a Content Repurposing Engine", desc: "Give Cowork one piece of content and it will create versions for every platform. Blog to social posts, email to carousel, podcast notes to LinkedIn. All in your voice, all automated.", connectors: ["Canva", "Notion", "Zapier"], timeSaved: "3-5 hrs/week", feature: "Multi-Step Tasks" },
+        { q: 2, t: 3, p: "medium", title: "Schedule Automated Content Calendar Generation", desc: "Set up a weekly scheduled task in Cowork that generates your content calendar every Friday. It pulls from your content pillars and creates a full week of topics, hooks, and drafts.", connectors: ["Google Calendar", "Notion"], timeSaved: "2-3 hrs/week", feature: "Scheduled Tasks" },
+        { q: 3, t: 3, p: "medium", title: "Train Cowork on Your Brand Voice", desc: "Upload your best-performing content samples into a Cowork Project. With persistent memory, Cowork learns your writing style and produces drafts that sound like you, not like AI.", connectors: ["Local Files", "Google Drive"], timeSaved: "5-10 hrs/week", feature: "Projects + Memory" },
+
+        // Client Management & Fulfilment (Q4-Q7)
+        { q: 4, t: 3, p: "high", title: "Automate Client Onboarding with Cowork", desc: "Create an onboarding workflow where Cowork generates personalised welcome packs, sends introductory emails, creates client folders, and schedules initial sessions. All triggered by a single command.", connectors: ["Gmail", "Google Drive", "Google Calendar"], timeSaved: "2-3 hrs/client", feature: "Multi-Step Tasks" },
+        { q: 5, t: 3, p: "high", title: "Connect Your CRM for Automated Client Tracking", desc: "Link HubSpot or Salesforce to Cowork. It will automatically update client records after sessions, track deliverables, and flag when clients need follow-up.", connectors: ["HubSpot", "Google Sheets"], timeSaved: "3-5 hrs/week", feature: "Connectors + Scheduled Tasks" },
+        { q: 6, t: 3, p: "medium", title: "Set Up Automated Pre-Session Briefings", desc: "Schedule Cowork to compile a briefing before every client call. It pulls their history, recent metrics, and suggested discussion points from your files and CRM. Ready in your inbox before the call.", connectors: ["Google Calendar", "Google Drive", "Gmail"], timeSaved: "1-2 hrs/week", feature: "Scheduled Tasks" },
+        { q: 7, t: 3, p: "medium", title: "Build an Automated Offboarding and Referral System", desc: "Cowork creates offboarding packs, sends testimonial requests, triggers referral incentive emails, and schedules re-engagement follow-ups. All from a single instruction.", connectors: ["Gmail", "Google Drive"], timeSaved: "1-2 hrs/client", feature: "Multi-Step Tasks" },
+
+        // Sales & Lead Generation (Q8-Q11)
+        { q: 8, t: 3, p: "high", title: "Automate Your Sales Pipeline Management", desc: "Connect your CRM to Cowork. It drafts follow-up emails, updates lead stages, sends reminders for stale leads, and generates weekly pipeline reports automatically.", connectors: ["HubSpot", "Gmail", "Google Sheets"], timeSaved: "3-5 hrs/week", feature: "Connectors + Scheduled Tasks" },
+        { q: 9, t: 3, p: "medium", title: "Automate Lead Research and Outreach Drafts", desc: "Cowork researches prospects using web browsing, enriches their data, and drafts personalised outreach messages. You just review and send.", connectors: ["Gmail", "Google Sheets"], timeSaved: "5-8 hrs/week", feature: "Computer Use + Projects" },
+        { q: 10, t: 3, p: "medium", title: "Create Lead Magnets and Follow-Up Sequences with Cowork", desc: "Cowork designs your lead magnet content, creates the PDF, drafts a 5-email welcome sequence, and sets up the delivery workflow. One session, entire funnel built.", connectors: ["Google Drive", "Gmail", "Zapier"], timeSaved: "2-4 hrs/week", feature: "Multi-Step Tasks + Local Files" },
+        { q: 11, t: 3, p: "medium", title: "Generate Proposals Automatically from Call Notes", desc: "After a sales call, give Cowork your notes. It generates a branded proposal with pricing, scope, and testimonials pulled from your templates. Ready to send in minutes.", connectors: ["Google Drive", "Local Files"], timeSaved: "1-2 hrs/proposal", feature: "Local Files + Projects" },
+
+        // Operations & Systems (Q12-Q15)
+        { q: 12, t: 3, p: "high", title: "Generate SOPs Automatically with Cowork", desc: "Describe any process verbally and Cowork creates a comprehensive, step-by-step SOP document with screenshots placeholders, checklists, and version tracking. Your entire business documented in days.", connectors: ["Google Drive", "Notion"], timeSaved: "4-6 hrs one-off", feature: "Local Files + Projects" },
+        { q: 13, t: 3, p: "medium", title: "Unify Your Tech Stack with Cowork Connectors", desc: "Connect all your tools through Cowork. Instead of switching between 10 apps, Cowork reads data from all of them and acts as your central command centre. Fewer tabs, less context switching.", connectors: ["Zapier", "All Connectors"], timeSaved: "2-3 hrs/week", feature: "Connectors" },
+        { q: 14, t: 3, p: "high", title: "Automate Repetitive Admin with Scheduled Tasks", desc: "Identify your top 5 repetitive tasks (data entry, file sorting, report generation) and set them up as scheduled Cowork tasks. They run automatically while you focus on revenue-generating work.", connectors: ["Local Files", "Google Sheets"], timeSaved: "5-10 hrs/week", feature: "Scheduled Tasks + Computer Use" },
+        { q: 15, t: 3, p: "medium", title: "Build Automated KPI Dashboards and Reports", desc: "Cowork pulls data from Stripe, your CRM, and Google Sheets to generate weekly performance reports. Revenue, conversion rates, client metrics. All compiled automatically every Monday morning.", connectors: ["Google Sheets", "Stripe", "HubSpot"], timeSaved: "2-4 hrs/week", feature: "Scheduled Tasks + Connectors" },
+
+        // Financial Administration (Q16-Q19)
+        { q: 16, t: 3, p: "medium", title: "Automate Invoicing and Payment Tracking", desc: "Connect Stripe to Cowork. It creates invoices, tracks payment status, drafts payment reminder emails, and generates monthly reconciliation reports.", connectors: ["Stripe", "Google Sheets", "Gmail"], timeSaved: "2-3 hrs/week", feature: "Connectors + Scheduled Tasks" },
+        { q: 17, t: 3, p: "medium", title: "Generate Financial Reports on Schedule", desc: "Set up a monthly scheduled task where Cowork compiles your P&L, cash flow summary, and variance analysis from connected data sources. Ready for your accountant without lifting a finger.", connectors: ["Stripe", "Google Sheets"], timeSaved: "2-4 hrs/month", feature: "Scheduled Tasks" },
+        { q: 18, t: 3, p: "medium", title: "Build Revenue Forecasting Models with Cowork", desc: "Cowork creates Excel-based financial models with scenario planning, pipeline-weighted forecasting, and trend analysis. Updated weekly from your real revenue data.", connectors: ["Local Files", "Google Sheets"], timeSaved: "3-5 hrs/month", feature: "Local Files + Multi-Step Tasks" },
+        { q: 19, t: 3, p: "medium", title: "Automate Receipt Processing and Expense Reports", desc: "Point Cowork at your receipt folders. It reads, categorises, and compiles expense reports with totals by category. Tax-ready documents generated automatically each month.", connectors: ["Local Files", "Google Drive"], timeSaved: "1-2 hrs/month", feature: "Local Files + Computer Use" },
+
+        // Email & Communication (Q20-Q23)
+        { q: 20, t: 3, p: "high", title: "Set Up Gmail Integration for Smart Email Triage", desc: "Connect Gmail to Cowork. It scans your inbox, categorises emails by urgency, drafts responses for routine messages, and flags items that need your personal attention. Email time cut in half.", connectors: ["Gmail"], timeSaved: "5-10 hrs/week", feature: "Connectors" },
+        { q: 21, t: 3, p: "medium", title: "Build an Email Template Library with Cowork", desc: "Cowork creates a comprehensive template library for every scenario. Enquiry responses, follow-ups, onboarding, offboarding, payment reminders. All written in your voice, saved for instant use.", connectors: ["Gmail", "Local Files"], timeSaved: "3-5 hrs/week", feature: "Projects + Local Files" },
+        { q: 22, t: 3, p: "medium", title: "Unify Multi-Channel Communication with Connectors", desc: "Connect Slack, Gmail, and Microsoft 365 to Cowork. It summarises conversations across channels, drafts replies, and ensures nothing falls through the cracks.", connectors: ["Slack", "Gmail", "Microsoft 365"], timeSaved: "2-4 hrs/week", feature: "Connectors" },
+        { q: 23, t: 3, p: "medium", title: "Train Cowork to Draft Emails in Your Voice", desc: "Upload your best email examples into a Cowork Project. It learns your tone, style, and typical responses. Then drafts 80% of your emails with minimal editing needed.", connectors: ["Gmail", "Local Files"], timeSaved: "3-5 hrs/week", feature: "Projects + Memory" },
+
+        // Team & Delegation (Q24-Q27)
+        { q: 24, t: 3, p: "high", title: "Use Cowork as Your AI Team Member", desc: "Cowork can handle the work of a full-time VA. Content creation, email management, file organisation, report generation, research. All running on your desktop while you focus on clients.", connectors: ["All Connectors"], timeSaved: "10-20 hrs/week", feature: "All Features" },
+        { q: 25, t: 3, p: "medium", title: "Create Task Briefs and SOPs Automatically", desc: "Describe what you need done verbally. Cowork generates detailed task briefs with context, deadlines, and step-by-step instructions. Perfect for delegating to VAs or contractors.", connectors: ["Notion", "Slack", "Google Drive"], timeSaved: "3-5 hrs/week", feature: "Local Files + Projects" },
+        { q: 26, t: 3, p: "high", title: "Automate Low-Value Tasks You Should Not Be Doing", desc: "Identify every task below your hourly rate. Set them up as Cowork automations. File sorting, data entry, scheduling, report compilation. Free yourself for revenue-generating work only.", connectors: ["All Connectors"], timeSaved: "10-15 hrs/week", feature: "Scheduled Tasks + Computer Use" },
+        { q: 27, t: 3, p: "medium", title: "Start with Simple Cowork Tasks to Build Confidence", desc: "Begin with low-risk tasks: file organisation, content drafts, email templates. Review every output. As confidence grows, delegate more complex workflows. Cowork's approval system keeps you in control.", connectors: ["Local Files"], timeSaved: "Progressive", feature: "Projects + Local Files" },
+
+        // Strategy & Planning (Q28-Q31)
+        { q: 28, t: 3, p: "medium", title: "Automate Weekly Planning Briefings", desc: "Schedule Cowork to generate your Monday morning briefing. It reviews last week's metrics, checks your calendar, summarises outstanding tasks, and proposes priorities for the week ahead.", connectors: ["Google Calendar", "Notion", "Local Files"], timeSaved: "2-3 hrs/week", feature: "Scheduled Tasks" },
+        { q: 29, t: 3, p: "medium", title: "Set Up Data-Driven Decision Making with Cowork", desc: "Cowork analyses your business data and presents plain-English insights. Not just numbers, but what they mean and what to do about them. No spreadsheet skills required.", connectors: ["Google Sheets", "Stripe"], timeSaved: "2-4 hrs/week", feature: "Connectors + Local Files" },
+        { q: 30, t: 3, p: "medium", title: "Automate Competitive Research and Market Analysis", desc: "Schedule monthly competitive analysis tasks. Cowork researches competitors, analyses trends, and creates comparison reports. Stay informed without spending your own time on research.", connectors: ["Computer Use"], timeSaved: "3-5 hrs/month", feature: "Computer Use + Scheduled Tasks" },
+        { q: 31, t: 3, p: "medium", title: "Create Your 12-Month Business Strategy with Cowork", desc: "Cowork helps build comprehensive strategy documents with quarterly goals, monthly milestones, KPIs, and action plans. It reviews progress weekly and suggests adjustments based on actual data.", connectors: ["Google Drive", "Local Files"], timeSaved: "4-6 hrs/quarter", feature: "Projects + Local Files" },
+
+        // Data & Reporting (Q32-Q35)
+        { q: 32, t: 3, p: "high", title: "Set Up Automated Business Reporting", desc: "Cowork generates weekly performance reports pulling data from all your connected tools. Revenue, client metrics, marketing ROI, pipeline status. Delivered to your inbox every Monday.", connectors: ["Google Sheets", "Stripe", "HubSpot"], timeSaved: "3-5 hrs/week", feature: "Scheduled Tasks + Connectors" },
+        { q: 33, t: 3, p: "medium", title: "Centralise Business Data with Cowork Connectors", desc: "Connect all your data sources to Cowork. It synthesises information across tools and creates unified views. No more logging into 10 different platforms to understand your business.", connectors: ["All Connectors"], timeSaved: "2-4 hrs/week", feature: "Connectors" },
+        { q: 34, t: 3, p: "medium", title: "Build Client Retention Analytics", desc: "Cowork analyses your client data to spot churn risks, identify retention patterns, and calculate lifetime value. Monthly insights that help you keep more clients longer.", connectors: ["Google Sheets", "HubSpot"], timeSaved: "2-3 hrs/month", feature: "Connectors + Scheduled Tasks" },
+        { q: 35, t: 3, p: "medium", title: "Get AI-Powered Data Insights in Plain English", desc: "Upload any spreadsheet or data set. Cowork analyses it and presents findings in simple, actionable language. No data science skills needed. Just clear answers to your business questions.", connectors: ["Local Files", "Google Sheets"], timeSaved: "2-3 hrs/week", feature: "Local Files + Projects" },
+
+        // File Management & Organisation (Q36-Q39)
+        { q: 36, t: 3, p: "medium", title: "Organise Your Entire File System with Cowork", desc: "Point Cowork at your messy folders. It sorts, renames, and restructures files into a clean, logical system. Downloads folder, client files, templates. All organised in one session.", connectors: ["Local Files", "Google Drive"], timeSaved: "2-5 hrs one-off", feature: "Local Files + Computer Use" },
+        { q: 37, t: 3, p: "high", title: "Automate Document Creation from Templates", desc: "Cowork creates proposals, contracts, client packs, and presentations from your templates with client-specific details auto-populated. Documents ready to send in minutes, not hours.", connectors: ["Local Files", "Google Drive", "Canva"], timeSaved: "3-5 hrs/week", feature: "Local Files + Projects" },
+        { q: 38, t: 3, p: "medium", title: "Set Up Automated Backup and Sync Workflows", desc: "Cowork manages file syncing between local storage and Google Drive. Version control, automated backups, and organised archiving. Never lose an important file again.", connectors: ["Google Drive", "Local Files"], timeSaved: "1-2 hrs/week", feature: "Local Files + Connectors" },
+        { q: 39, t: 3, p: "medium", title: "Eliminate File Admin with Automated Filing", desc: "Set up rules-based filing where Cowork automatically sorts new documents into the correct folders, renames them consistently, and archives old versions. Zero manual file admin.", connectors: ["Local Files", "Google Drive"], timeSaved: "1-3 hrs/week", feature: "Scheduled Tasks + Local Files" }
+    ];
+
+    const recs = recMap.filter(r => (answers[r.q] || 0) <= r.t);
+    recs.sort((a, b) => (a.p === 'high' ? 0 : 1) - (b.p === 'high' ? 0 : 1));
+
+    // Calculate total time saved
+    let totalTimeSavedMin = 0;
+    let totalTimeSavedMax = 0;
+    recs.forEach(r => {
+        const match = r.timeSaved.match(/(\d+)-?(\d+)?/);
+        if (match) {
+            totalTimeSavedMin += parseInt(match[1]) || 0;
+            totalTimeSavedMax += parseInt(match[2] || match[1]) || 0;
+        }
+    });
+
+    document.getElementById('timeSavedHero').innerHTML = `
+        <div class="time-saved-label">Estimated Time You Could Save</div>
+        <div class="time-saved-number">${totalTimeSavedMin}-${totalTimeSavedMax}</div>
+        <div class="time-saved-unit">hours per week</div>
+        <div class="time-saved-desc">Based on the ${recs.length} Cowork automations triggered by your answers</div>`;
+
+    let recHTML = '';
+    recs.slice(0, 10).forEach((r, i) => {
+        const connectorTags = r.connectors.map(c => `<span class="rec-tag tag-connector">${c}</span>`).join('');
+        recHTML += `
+        <div class="rec-card" style="animation-delay:${0.1 + i * 0.06}s">
+            <div class="rec-priority ${r.p === 'high' ? 'priority-high' : 'priority-medium'}">${i + 1}</div>
+            <div class="rec-content">
+                <h3>${r.title}</h3>
+                <p>${r.desc}</p>
+                ${connectorTags}
+                <span class="rec-tag tag-time">${r.timeSaved}</span>
+                <span class="rec-tag tag-feature">${r.feature}</span>
+            </div>
+        </div>`;
+    });
+    if (recs.length === 0) recHTML = '<div class="rec-card"><div class="rec-content"><h3>You are already running an optimised system.</h3><p>Your business is performing well across all areas. Cowork can still add leverage by automating your existing workflows and freeing up time for the highest value activities only you can do.</p></div></div>';
+    document.getElementById('recCards').innerHTML = recHTML;
+
+    generateSprintPlan();
+}
+
+function generateSprintPlan() {
+    const weak = (q, threshold) => (answers[q] || 0) <= threshold;
+
+    const day1Tasks = [];
+    const week1Tasks = [];
+    const week2Tasks = [];
+    const week3Tasks = [];
+    const week4Tasks = [];
+
+    // DAY 1: Install and configure (always show these)
+    day1Tasks.push({ title: "Install Claude Desktop and activate Cowork", desc: "Download Claude Desktop, sign up for Pro or Max plan, and enable Cowork from the settings.", connector: "Setup", time: "15 min" });
+    day1Tasks.push({ title: "Grant folder access to your business files", desc: "Give Cowork permission to read and edit your key business folders (documents, client files, templates).", connector: "Local Files", time: "5 min" });
+    day1Tasks.push({ title: "Set up your first Cowork Project with brand context", desc: "Create a Project with your brand voice guide, target audience, and key business information for persistent memory.", connector: "Projects", time: "20 min" });
+
+    // WEEK 1: Connect highest-priority integrations
+    if (weak(20, 3) || weak(21, 3) || weak(23, 3)) week1Tasks.push({ title: "Connect Gmail to Cowork", desc: "Link your email account. Start with email triage and automated draft responses.", connector: "Gmail", time: "10 min" });
+    if (weak(0, 3) || weak(1, 3) || weak(3, 3)) week1Tasks.push({ title: "Connect Google Drive and upload brand assets", desc: "Link Google Drive and upload your content templates, brand guidelines, and example content for voice training.", connector: "Google Drive", time: "15 min" });
+    if (weak(8, 3) || weak(5, 3)) week1Tasks.push({ title: "Connect your CRM (HubSpot or Google Sheets)", desc: "Link your client tracking system. Cowork will start managing pipeline updates and follow-up reminders.", connector: "HubSpot / Sheets", time: "10 min" });
+    if (weak(15, 3) || weak(16, 3)) week1Tasks.push({ title: "Connect Stripe for financial data", desc: "Link your payment processor. Cowork can now generate revenue reports and track invoicing.", connector: "Stripe", time: "10 min" });
+    if (weak(22, 3)) week1Tasks.push({ title: "Connect Slack for team communication", desc: "Link Slack to unify your communication channels and get message summaries.", connector: "Slack", time: "10 min" });
+
+    // WEEK 2: Set up first automations
+    if (weak(0, 3) || weak(1, 3)) week2Tasks.push({ title: "Create your first content batch with Cowork", desc: "Ask Cowork to generate a full week of content across all your channels. Review, refine, and schedule.", connector: "Projects", time: "30 min" });
+    if (weak(14, 3)) week2Tasks.push({ title: "Identify and automate your top 3 repetitive tasks", desc: "List your most time-consuming admin tasks. Set each one up as a Cowork automation or scheduled task.", connector: "Scheduled Tasks", time: "45 min" });
+    if (weak(4, 3)) week2Tasks.push({ title: "Build your client onboarding automation", desc: "Create a multi-step onboarding workflow: welcome pack, email sequence, folder creation, calendar booking.", connector: "Multi-Step Tasks", time: "30 min" });
+    if (weak(12, 3)) week2Tasks.push({ title: "Generate SOPs for your top 5 business processes", desc: "Describe each process to Cowork and let it create comprehensive, step-by-step documentation.", connector: "Local Files", time: "60 min" });
+    if (weak(36, 3) || weak(39, 3)) week2Tasks.push({ title: "Organise your file system with Cowork", desc: "Point Cowork at your messiest folders. Let it sort, rename, and restructure everything logically.", connector: "Local Files", time: "30 min" });
+
+    // WEEK 3: Build document templates and workflows
+    if (weak(37, 3) || weak(11, 3)) week3Tasks.push({ title: "Create your document template library", desc: "Have Cowork build templates for proposals, contracts, client packs, and reports. All branded and ready to auto-populate.", connector: "Local Files", time: "60 min" });
+    if (weak(2, 3)) week3Tasks.push({ title: "Set up automated content calendar generation", desc: "Schedule a weekly Cowork task that generates your content calendar every Friday with topics, hooks, and drafts.", connector: "Scheduled Tasks", time: "15 min" });
+    if (weak(6, 3)) week3Tasks.push({ title: "Set up automated pre-session client briefings", desc: "Schedule Cowork to compile briefings before each client call with their history, metrics, and discussion points.", connector: "Scheduled Tasks", time: "15 min" });
+    if (weak(28, 3)) week3Tasks.push({ title: "Set up your Monday morning business briefing", desc: "Schedule a weekly report that reviews metrics, checks your calendar, and proposes priorities for the week.", connector: "Scheduled Tasks", time: "15 min" });
+
+    // WEEK 4: Review, optimise, and expand
+    if (weak(32, 3) || weak(15, 3)) week4Tasks.push({ title: "Set up automated weekly business reports", desc: "Configure Cowork to generate comprehensive performance reports every Monday from all connected data sources.", connector: "Scheduled Tasks", time: "20 min" });
+    if (weak(17, 3) || weak(18, 3)) week4Tasks.push({ title: "Build your financial reporting automation", desc: "Set up monthly P&L, cash flow, and forecasting reports that generate automatically from Stripe and Sheets data.", connector: "Scheduled Tasks", time: "30 min" });
+    week4Tasks.push({ title: "Review all automations and optimise", desc: "Check every automation you set up. Refine instructions, adjust schedules, and identify the next batch of tasks to automate.", connector: "Review", time: "30 min" });
+    week4Tasks.push({ title: "Plan your next 30 days of Cowork expansion", desc: "Identify the next 5 manual processes to automate. Set up new connectors. Expand into areas you have not touched yet.", connector: "Strategy", time: "30 min" });
+
+    let html = '';
+    const phases = [
+        { tasks: day1Tasks, badge: "day1", badgeText: "Day 1", title: "Install, Configure & First Project", delay: 0.1 },
+        { tasks: week1Tasks, badge: "w1", badgeText: "Week 1", title: "Connect Your Key Integrations", delay: 0.2 },
+        { tasks: week2Tasks, badge: "w2", badgeText: "Week 2", title: "First Automations & SOPs", delay: 0.3 },
+        { tasks: week3Tasks, badge: "w3", badgeText: "Week 3", title: "Templates, Schedules & Workflows", delay: 0.4 },
+        { tasks: week4Tasks, badge: "w4", badgeText: "Week 4", title: "Review, Optimise & Expand", delay: 0.5 }
+    ];
+
+    phases.forEach(phase => {
+        if (phase.tasks.length === 0) return;
+        html += `
+        <div class="sprint-week" style="animation-delay:${phase.delay}s">
+            <div class="sprint-week-header">
+                <span class="sprint-week-badge ${phase.badge}">${phase.badgeText}</span>
+                <span class="sprint-week-title">${phase.title}</span>
+            </div>
+            <div class="sprint-tasks">
+                ${phase.tasks.map(t => `
+                <div class="sprint-task">
+                    <div class="sprint-check"></div>
+                    <div class="sprint-task-content">
+                        <div class="sprint-task-title">${t.title}</div>
+                        <div class="sprint-task-desc">${t.desc}</div>
+                        <span class="sprint-task-connector">${t.connector}</span>
+                        <span class="sprint-task-time">${t.time}</span>
+                    </div>
+                </div>`).join('')}
+            </div>
+        </div>
+        <div class="sprint-divider"></div>`;
+    });
+
+    if (html === '') {
+        html = '<div class="sprint-task"><div class="sprint-task-content"><div class="sprint-task-title">You are already running a strong system.</div><div class="sprint-task-desc">Focus on connecting Cowork to your existing tools and letting it handle the remaining manual tasks. Even well-optimised businesses can save 5-10 hours per week with Cowork automations.</div></div></div>';
+    }
+
+    document.getElementById('sprintContent').innerHTML = html;
+}
+
+renderQuestions();
+</script>
+</body>
+</html>
