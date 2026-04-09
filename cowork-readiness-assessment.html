@@ -73,6 +73,7 @@
         .score-3 { background: rgba(240,160,48,0.15); color: var(--amber); }
         .score-4 { background: rgba(107,155,155,0.15); color: var(--teal); }
         .score-5 { background: rgba(76,175,80,0.15); color: var(--green); }
+        .score-na { background: rgba(156,163,175,0.15); color: #6B7280; }
         .rating-label { font-size: 14px; font-weight: 500; color: var(--dark-grey); }
         .question-nav { display: flex; justify-content: space-between; margin-top: 32px; }
         .btn { padding: 14px 32px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.3s; border: none; }
@@ -625,6 +626,10 @@ function renderQuestions() {
                         <div class="rating-label">${opt.label}</div>
                     </div>
                 `).join('')}
+                <div class="rating-option" onclick="selectAnswer(${i}, 0, this)">
+                    <div class="rating-score score-na">N/A</div>
+                    <div class="rating-label">Not applicable for my business</div>
+                </div>
             </div>
             <div class="question-nav">
                 <button class="btn btn-back" onclick="prevQuestion()" ${i === 0 ? 'style="visibility:hidden"' : ''}>Back</button>
@@ -675,8 +680,9 @@ function showResults() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const totalScore = Object.values(answers).reduce((a, b) => a + b, 0);
-    const maxScore = questions.length * 5;
-    const pct = Math.round((totalScore / maxScore) * 100);
+    const naCount = Object.values(answers).filter(v => v === 0).length;
+    const maxScore = (questions.length - naCount) * 5;
+    const pct = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
 
     let grade, gradeClass, gradeDesc;
     if (pct < 30) { grade = "Major Automation Opportunity"; gradeClass = "grade-critical"; gradeDesc = "Your business is running almost entirely on manual effort. The good news? Cowork can automate huge chunks of what you do every day. The recommendations below show you exactly where to start for maximum impact."; }
@@ -696,7 +702,7 @@ function showResults() {
         const cat = q.category;
         if (!catScores[cat]) { catScores[cat] = 0; catMax[cat] = 0; }
         catScores[cat] += answers[i] || 0;
-        catMax[cat] += 5;
+        catMax[cat] += (answers[i] === 0) ? 0 : 5;
     });
 
     let catHTML = '';
